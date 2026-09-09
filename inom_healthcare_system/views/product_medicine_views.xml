@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- EXTEND product.product FORM — add Pharmacy tab               -->
+    <!-- ============================================================ -->
+    <record id="product_product_form_pharmacy_tab" model="ir.ui.view">
+        <field name="name">product.product.form.pharmacy</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Smart buttons: add Rx Lines, Batches, Stock Moves -->
+            <div name="button_box" position="inside">
+                <button name="action_view_prescription_lines" type="object"
+                        class="oe_stat_button" icon="fa-pills"
+                        invisible="not is_medicine">
+                    <field name="prescription_line_count" widget="statinfo" string="Rx Lines"/>
+                </button>
+                <button name="action_view_batches" type="object"
+                        class="oe_stat_button" icon="fa-cubes"
+                        invisible="not is_medicine">
+                    <field name="batch_count" widget="statinfo" string="Batches"/>
+                </button>
+                <button name="action_view_stock_moves" type="object"
+                        class="oe_stat_button" icon="fa-exchange"
+                        invisible="not is_medicine">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Stock Moves</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Low stock ribbon -->
+            <widget name="web_ribbon" position="before">
+                <widget name="web_ribbon" title="Low Stock" bg_color="text-bg-danger"
+                        invisible="not is_low_stock or not is_medicine"/>
+            </widget>
+
+            <!-- Add "Is Medicine" toggle in the General Information tab -->
+            <field name="sale_ok" position="before">
+                <label for="is_medicine" string="Is Medicine" class="oe_inline"/>
+
+                <field name="is_medicine" widget="boolean_toggle" nolabel="1" class="oe_inline"/>
+                <label for="is_consultation_bill" string="Consultation" class="oe_inline"/>
+                <field name="is_consultation_bill" widget="boolean_toggle"/>
+            </field>
+
+            <!-- Add Pharmacy tab at the end of the notebook -->
+            <page name="purchase" position="after">
+                <page string="Pharmacy" name="pharmacy" invisible="not is_medicine">
+                    <group>
+                        <group string="Clinical Classification">
+                            <field name="medicine_type"/>
+                            <field name="drug_category"/>
+                            <field name="strength" placeholder="e.g. 500 mg"/>
+                            <field name="generic_name"/>
+                            <field name="brand_name"/>
+                            <field name="is_generic"/>
+                            <field name="is_controlled"/>
+                        </group>
+                        <group string="Stock Control">
+                            <field name="min_stock"/>
+                            <field name="is_low_stock" readonly="1"/>
+                            <field name="nearest_expiry" readonly="1"/>
+                            <field name="manufacturer_id"/>
+                        </group>
+                    </group>
+                    <group string="Clinical Notes">
+                        <field name="dosage_info"
+                               placeholder="e.g. 1 tablet twice daily after food"/>
+                        <field name="storage_instructions"
+                               placeholder="e.g. Store below 25°C, away from sunlight"/>
+                    </group>
+                    <separator string="Batch / Expiry Tracking"/>
+                    <field name="medicine_batch_ids">
+                        <list editable="bottom"
+                              decoration-danger="expiry_status == 'expired'"
+                              decoration-warning="expiry_status == 'near'">
+                            <field name="batch_no"/>
+                            <field name="mfg_date"/>
+                            <field name="quantity"/>
+                            <field name="expiry_date"/>
+                            <field name="expiry_status" readonly="1"/>
+                            <field name="status"/>
+                        </list>
+                    </field>
+                </page>
+            </page>
+
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- MEDICINE LIST — filtered product list for Pharmacy menu      -->
+    <!-- ============================================================ -->
+    <record id="medicine_list_view" model="ir.ui.view">
+        <field name="name">medicine.list</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="is_low_stock">
+                <field name="default_code" string="Code" optional="show"/>
+                <field name="name" string="Medicine"/>
+                <field name="generic_name" optional="show"/>
+                <field name="strength" optional="show"/>
+                <field name="medicine_type"/>
+                <field name="drug_category" optional="show"/>
+                <field name="barcode" optional="show"/>
+                <field name="list_price" string="Sale Price"/>
+                <field name="qty_available" string="On Hand"/>
+                <field name="min_stock" optional="show"/>
+                <field name="is_low_stock" string="Low Stock"/>
+                <field name="is_controlled" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- MEDICINE SEARCH                                               -->
+    <!-- ============================================================ -->
+    <record id="medicine_search_view" model="ir.ui.view">
+	    <field name="name">medicine.search</field>
+	    <field name="model">product.product</field>
+	    <field name="arch" type="xml">
+	        <search>
+	            <field name="name"
+	                   string="Name / Generic"
+	                   filter_domain="[
+	                       '|',
+	                       ('name', 'ilike', self),
+	                       ('generic_name', 'ilike', self)
+	                   ]"/>
+	
+	            <field name="barcode"/>
+	            <field name="default_code"
+	                   string="Code"/>
+	            <separator/>
+	            <filter name="filter_low_stock"
+	                    string="Low Stock"
+	                    domain="[('is_low_stock', '=', True)]"/>
+	            <filter name="filter_controlled"
+	                    string="Controlled"
+	                    domain="[('is_controlled', '=', True)]"/>
+	            <group>
+	                <filter name="group_category"
+	                        string="Drug Category"
+	                        context="{'group_by': 'drug_category'}"/>
+	                <filter name="group_type"
+	                        string="Medicine Type"
+	                        context="{'group_by': 'medicine_type'}"/>
+	            </group>
+	        </search>
+	    </field>
+	</record>
+
+    <!-- ============================================================ -->
+    <!-- ACTION — Pharmacy > Medicines (filtered to is_medicine)      -->
+    <!-- ============================================================ -->
+    <record id="action_medicine_list" model="ir.actions.act_window">
+        <field name="name">Medicines</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_medicine', '=', True)]</field>
+        <field name="context">{'default_is_medicine': True, 'default_type': 'consu', 'default_is_storable': True}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('medicine_list_view')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('product.product_normal_form_view')})]"/>
+        <field name="search_view_id" ref="medicine_search_view"/>
+    </record>
+
+</odoo>

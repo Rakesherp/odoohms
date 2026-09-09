@@ -1,0 +1,292 @@
+<odoo>
+
+	<!-- Phase 2A: Patient 360 / EMR workspace -->
+	<record id="patient_form" model="ir.ui.view">
+		<field name="name">patient.form</field>
+		<field name="model">oeh.patient</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<div class="oe_button_box" name="button_box">
+						<button name="action_view_appointments" type="object" class="oe_stat_button" icon="fa-calendar">
+							<field name="appointment_count" widget="statinfo" string="Appointments"/>
+						</button>
+						<button name="action_view_visits" type="object" class="oe_stat_button" icon="fa-history">
+							<field name="visit_count" widget="statinfo" string="Visits"/>
+						</button>
+						<button name="action_view_consultations" type="object" class="oe_stat_button" icon="fa-stethoscope">
+							<field name="consultation_count" widget="statinfo" string="Consultations"/>
+						</button>
+						<button name="action_view_prescriptions" type="object" class="oe_stat_button" icon="fa-medkit">
+							<field name="prescription_count" widget="statinfo" string="Prescriptions"/>
+						</button>
+						<button name="action_view_insurance_claims" type="object" class="oe_stat_button" icon="fa-shield">
+							<field name="insurance_count" widget="statinfo" string="Insurance"/>
+						</button>
+						<button name="action_view_labs" type="object" class="oe_stat_button" icon="fa-flask">
+							<field name="lab_count" widget="statinfo" string="Lab"/>
+						</button>
+						<button name="action_view_radiology" type="object" class="oe_stat_button" icon="fa-image">
+							<field name="radiology_count" widget="statinfo" string="Radiology"/>
+						</button>
+					</div>
+
+					<div class="oe_title">
+						<h3><field name="patient_id" readonly="1"/></h3>
+						<h1><field name="name" placeholder="Patient Name"/></h1>
+					</div>
+
+					<div class="alert alert-danger d-flex align-items-center"
+						 role="alert" style="margin:0 0 16px;"
+						 invisible="not allergy_ids">
+						<i class="fa fa-exclamation-triangle fa-2x me-3" title="Warning" aria-label="Warning"/>
+						<div>
+							<strong>ALLERGY ALERT</strong>
+							<div><field name="allergy_ids" widget="many2many_tags" readonly="1"/></div>
+						</div>
+					</div>
+
+					<group>
+						<group string="Patient">
+							<field name="dob"/>
+							<field name="age"/>
+							<field name="gender"/>
+							<field name="blood_group"/>
+						</group>
+						<group string="Contact">
+							<field name="phone"/>
+							<field name="email"/>
+							<field name="emergency_contact"/>
+							<field name="partner_id"/>
+						</group>
+					</group>
+
+					<group string="Latest Vitals" col="4">
+						<group string="Blood Pressure">
+							<field name="bp_systolic" string="Systolic (mmHg)"/>
+							<field name="bp_diastolic" string="Diastolic (mmHg)"/>
+						</group>
+						<group string="Basic">
+							<field name="pulse_rate" string="Pulse (bpm)"/>
+							<field name="temperature" string="Temperature (°C)"/>
+							<field name="spo2" string="SpO₂ (%)"/>
+							<field name="respiratory_rate" string="Respiratory (/min)"/>
+						</group>
+						<group string="Body">
+							<field name="weight" string="Weight (kg)"/>
+							<field name="height" string="Height (cm)"/>
+							<field name="bmi" string="BMI (kg/m²)" readonly="1"/>
+						</group>
+						<group string="Clinical">
+							<field name="blood_glucose" string="Blood Glucose (mg/dL)"/>
+						</group>
+					</group>
+
+					<notebook>
+						<page string="Medical History">
+							<field name="history_ids">
+								<list editable="bottom">
+									<field name="disease"/>
+									<field name="diagnosed_date"/>
+									<field name="notes"/>
+								</list>
+							</field>
+						</page>
+
+						<page string="Allergies">
+							<field name="allergy_ids">
+								<list editable="bottom">
+									<field name="allergy_name"/>
+									<field name="severity" widget="badge"/>
+									<field name="notes"/>
+								</list>
+							</field>
+						</page>
+
+						<page string="Vaccinations">
+							<field name="vaccination_ids">
+								<list editable="bottom">
+									<field name="vaccine_name"/>
+									<field name="vaccination_date"/>
+									<field name="next_due_date"/>
+									<field name="status"/>
+								</list>
+							</field>
+						</page>
+
+						<page string="Family">
+							<field name="family_member_ids" widget="many2many_tags"/>
+						</page>
+
+						<page string="Consultations">
+							<field name="consultation_ids">
+								<list default_order="consultation_date desc">
+									<field name="consultation_date"/>
+									<field name="doctor_id"/>
+									<field name="appointment_id"/>
+									<field name="diagnosis_id"/>
+									<field name="state" widget="badge"/>
+									<field name="followup_date"/>
+								</list>
+							</field>
+						</page>
+
+						<page string="Visit Timeline">
+							<field name="visit_ids">
+								<list editable="bottom">
+									<field name="visit_date"/>
+									<field name="doctor"/>
+									<field name="chief_complaint"/>
+									<field name="diagnosis"/>
+									<field name="notes"/>
+								</list>
+							</field>
+						</page>
+					</notebook>
+				</sheet>
+				<chatter/>
+			</form>
+		</field>
+	</record>
+
+	<!-- Tree View -->
+	<record id="patient_tree" model="ir.ui.view">
+
+		<field name="name">patient.tree</field>
+		<field name="model">oeh.patient</field>
+
+		<field name="arch" type="xml">
+
+			<list>
+				<field name="patient_id" />
+				<field name="name" />
+				<field name="gender" />
+				<field name="phone" />
+				<field name="blood_group" />
+			</list>
+
+		</field>
+
+	</record>
+	<record id="patient_view_kanban" model="ir.ui.view">
+    <field name="name">oeh.patient.kanban</field>
+    <field name="model">oeh.patient</field>
+    <field name="arch" type="xml">
+        <kanban>
+
+            <field name="name"/>
+            <field name="patient_id"/>
+            <field name="phone"/>
+            <field name="gender"/>
+            <field name="age"/>
+
+            <templates>
+                <t t-name="card">
+
+                    <div class="oe_kanban_global_click"
+                         style="background:#d6fff5;
+                                border:1px solid #dbeafe;
+                                border-radius:12px;
+                                overflow:hidden;
+                                box-shadow:0 2px 8px rgba(15,23,42,0.08);">
+
+                        <!-- Header -->
+                        <div style="background:#eff6ff;
+                                    padding:14px 16px;
+                                    border-bottom:1px solid #dbeafe;">
+
+                            <div style="font-size:17px;
+                                        font-weight:600;
+                                        color:#1e3a8a;">
+                                <field name="name"/>
+                            </div>
+
+                            <div style="margin-top:5px;">
+                                <span style="background:#dbeafe;
+                                             color:#1d4ed8;
+                                             padding:3px 8px;
+                                             border-radius:12px;
+                                             font-size:11px;
+                                             font-weight:600;">
+                                    Patient ID:
+                                    <field name="patient_id"/>
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <!-- Patient Details -->
+                        <div style="padding:14px 16px;">
+
+                            <!-- Phone -->
+                            <div style="margin-bottom:9px;">
+                                <span style="color:#64748b;
+                                             font-size:12px;">
+                                    Phone
+                                </span>
+
+                                <div style="color:#334155;
+                                            font-size:14px;
+                                            font-weight:500;">
+                                    <field name="phone"/>
+                                </div>
+                            </div>
+
+                            <!-- Gender + Age -->
+                            <div class="d-flex gap-2">
+
+                                <span style="background:#f0fdf4;
+                                             color:#15803d;
+                                             padding:5px 9px;
+                                             border-radius:6px;
+                                             font-size:12px;
+                                             font-weight:600;">
+                                    <field name="gender"/>
+                                </span>
+
+                                <span style="background:#fff7ed;
+                                             color:#c2410c;
+                                             padding:5px 9px;
+                                             border-radius:6px;
+                                             font-size:12px;
+                                             font-weight:600;">
+                                    Age:
+                                    <field name="age"/>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </t>
+            </templates>
+
+        </kanban>
+    </field>
+</record>
+	
+	<record id="patient_view_search" model="ir.ui.view">
+	    <field name="name">oeh.patient.search</field>
+	    <field name="model">oeh.patient</field>
+	    <field name="arch" type="xml">
+	        <search>
+	            <field name="name"/>
+	            <field name="phone"/>
+	            <field name="email"/>
+	        </search>
+	    </field>
+	</record>
+
+
+	<!-- Action -->
+	<record id="patient_action" model="ir.actions.act_window">
+
+		<field name="name">Patients</field>
+		<field name="res_model">oeh.patient</field>
+		<field name="view_mode">kanban,list,form</field>
+
+	</record>
+
+</odoo>

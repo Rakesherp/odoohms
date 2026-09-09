@@ -1,0 +1,197 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_patient_rec,patient.rec,model_oeh_patient,group_hospital_receptionist,1,1,1,1
+access_patient_doc,patient.doc,model_oeh_patient,group_hospital_doctor,1,1,1,1
+access_patient_nur,patient.nur,model_oeh_patient,group_hospital_nurse,1,1,0,0
+access_patient_bil,patient.bil,model_oeh_patient,group_hospital_billing,1,0,0,0
+access_patient_ins,patient.ins,model_oeh_patient,group_hospital_insurance,1,0,0,0
+access_patient_pha,patient.pha,model_oeh_patient,group_hospital_pharmacist,1,0,0,0
+access_patient_lab,patient.lab,model_oeh_patient,group_hospital_lab,1,0,0,0
+access_patient_rad,patient.rad,model_oeh_patient,group_hospital_radiology,1,0,0,0
+access_allergy_doc,allergy.doc,model_patient_allergy,group_hospital_doctor,1,1,1,1
+access_allergy_nur,allergy.nur,model_patient_allergy,group_hospital_nurse,1,1,1,1
+access_history_doc,history.doc,model_patient_history,group_hospital_doctor,1,1,1,1
+access_history_nur,history.nur,model_patient_history,group_hospital_nurse,1,1,0,0
+access_vaccination_doc,vaccination.doc,model_patient_vaccination,group_hospital_doctor,1,1,1,1
+access_vaccination_nur,vaccination.nur,model_patient_vaccination,group_hospital_nurse,1,1,1,1
+access_visit_rec,visit.rec,model_patient_visit,group_hospital_receptionist,1,1,1,1
+access_visit_doc,visit.doc,model_patient_visit,group_hospital_doctor,1,1,1,1
+access_visit_nur,visit.nur,model_patient_visit,group_hospital_nurse,1,1,1,1
+access_doctor_rec,doctor.rec,model_oeh_doctor,group_hospital_receptionist,1,1,1,1
+access_doctor_doc,doctor.doc,model_oeh_doctor,group_hospital_doctor,1,0,0,0
+access_doctor_nur,doctor.nur,model_oeh_doctor,group_hospital_nurse,1,0,0,0
+access_doctor_bil,doctor.bil,model_oeh_doctor,group_hospital_billing,1,0,0,0
+access_schedule_rec,schedule.rec,model_doctor_schedule,group_hospital_receptionist,1,1,1,1
+access_schedule_doc,schedule.doc,model_doctor_schedule,group_hospital_doctor,1,1,1,1
+access_schedule_nur,schedule.nur,model_doctor_schedule,group_hospital_nurse,1,0,0,0
+access_appointment_rec,appointment.rec,model_oeh_appointment,group_hospital_receptionist,1,1,1,1
+access_appointment_doc,appointment.doc,model_oeh_appointment,group_hospital_doctor,1,1,0,0
+access_appointment_nur,appointment.nur,model_oeh_appointment,group_hospital_nurse,1,1,0,0
+access_appointment_bil,appointment.bil,model_oeh_appointment,group_hospital_billing,1,0,0,0
+access_followup_rec,followup.rec,model_oeh_followup,group_hospital_receptionist,1,1,1,1
+access_followup_doc,followup.doc,model_oeh_followup,group_hospital_doctor,1,1,1,1
+access_followup_nur,followup.nur,model_oeh_followup,group_hospital_nurse,1,1,1,1
+access_queue_rec,queue.rec,model_oeh_queue,group_hospital_receptionist,1,1,1,1
+access_queue_doc,queue.doc,model_oeh_queue,group_hospital_doctor,1,1,1,1
+access_queue_nur,queue.nur,model_oeh_queue,group_hospital_nurse,1,1,1,1
+access_clinical_doc,clinical.doc,model_oeh_clinical,group_hospital_doctor,1,1,1,1
+access_clinical_nur,clinical.nur,model_oeh_clinical,group_hospital_nurse,1,0,0,0
+access_prescription_doc,prescription.doc,model_oeh_prescription,group_hospital_doctor,1,1,1,1
+access_prescription_nur,prescription.nur,model_oeh_prescription,group_hospital_nurse,1,0,0,0
+access_prescription_pha,prescription.pha,model_oeh_prescription,group_hospital_pharmacist,1,0,0,0
+access_prescription_line_doc,prescription.line.doc,model_oeh_prescription_line,group_hospital_doctor,1,1,1,1
+access_prescription_line_nur,prescription.line.nur,model_oeh_prescription_line,group_hospital_nurse,1,0,0,0
+access_prescription_line_pha,prescription.line.pha,model_oeh_prescription_line,group_hospital_pharmacist,1,0,0,0
+access_treatment_doc,treatment.doc,model_oeh_treatment,group_hospital_doctor,1,1,1,1
+access_treatment_nur,treatment.nur,model_oeh_treatment,group_hospital_nurse,1,0,0,0
+access_treatment_bil,treatment.bil,model_oeh_treatment,group_hospital_billing,1,0,0,0
+access_certificate_doc,certificate.doc,model_oeh_certificate,group_hospital_doctor,1,1,1,1
+access_certificate_rec,certificate.rec,model_oeh_certificate,group_hospital_receptionist,1,0,0,0
+access_icd_doc,icd.doc,model_oeh_icd,group_hospital_doctor,1,1,1,1
+access_icd_nur,icd.nur,model_oeh_icd,group_hospital_nurse,1,0,0,0
+access_icd_bil,icd.bil,model_oeh_icd,group_hospital_billing,1,0,0,0
+access_icd_ins,icd.ins,model_oeh_icd,group_hospital_insurance,1,0,0,0
+access_icd_rec,icd.rec,model_oeh_icd,group_hospital_receptionist,1,0,0,0
+access_consent_doc,consent.doc,model_oeh_consent,group_hospital_doctor,1,1,1,1
+access_consent_nur,consent.nur,model_oeh_consent,group_hospital_nurse,1,1,1,1
+access_consent_rec,consent.rec,model_oeh_consent,group_hospital_receptionist,1,0,0,0
+access_laboratory_lab,laboratory.lab,model_oeh_laboratory,group_hospital_lab,1,1,1,1
+access_laboratory_doc,laboratory.doc,model_oeh_laboratory,group_hospital_doctor,1,0,0,0
+access_laboratory_nur,laboratory.nur,model_oeh_laboratory,group_hospital_nurse,1,0,0,0
+access_laboratory_bil,laboratory.bil,model_oeh_laboratory,group_hospital_billing,1,0,0,0
+access_sample_lab,sample.lab,model_oeh_sample,group_hospital_lab,1,1,1,1
+access_sample_doc,sample.doc,model_oeh_sample,group_hospital_doctor,1,0,0,0
+access_radiology_rad,radiology.rad,model_oeh_radiology,group_hospital_radiology,1,1,1,1
+access_radiology_doc,radiology.doc,model_oeh_radiology,group_hospital_doctor,1,0,0,0
+access_radiology_nur,radiology.nur,model_oeh_radiology,group_hospital_nurse,1,0,0,0
+access_radiology_bil,radiology.bil,model_oeh_radiology,group_hospital_billing,1,0,0,0
+access_surgery_doc,surgery.doc,model_oehealth_surgery,group_hospital_doctor,1,1,1,1
+access_surgery_nur,surgery.nur,model_oehealth_surgery,group_hospital_nurse,1,0,0,0
+access_surgery_bil,surgery.bil,model_oehealth_surgery,group_hospital_billing,1,0,0,0
+access_ot_schedule_doc,ot_schedule.doc,model_oehealth_ot_schedule,group_hospital_doctor,1,1,1,1
+access_ot_schedule_nur,ot_schedule.nur,model_oehealth_ot_schedule,group_hospital_nurse,1,1,1,1
+access_ot_schedule_rec,ot_schedule.rec,model_oehealth_ot_schedule,group_hospital_receptionist,1,0,0,0
+access_surgical_team_doc,surgical_team.doc,model_oehealth_surgical_team,group_hospital_doctor,1,1,1,1
+access_surgical_team_nur,surgical_team.nur,model_oehealth_surgical_team,group_hospital_nurse,1,0,0,0
+access_anesthesia_doc,anesthesia.doc,model_oehealth_anesthesia_record,group_hospital_doctor,1,1,1,1
+access_anesthesia_nur,anesthesia.nur,model_oehealth_anesthesia_record,group_hospital_nurse,1,0,0,0
+access_batch_pha,batch.pha,model_oeh_medicine_batch,group_hospital_pharmacist,1,1,1,1
+access_batch_doc,batch.doc,model_oeh_medicine_batch,group_hospital_doctor,1,0,0,0
+access_pediatric_doc,pediatric.doc,model_oeh_pediatric,group_hospital_doctor,1,1,1,1
+access_pediatric_nur,pediatric.nur,model_oeh_pediatric,group_hospital_nurse,1,0,0,0
+access_therapy_doc,therapy.doc,model_oeh_therapy,group_hospital_doctor,1,1,1,1
+access_therapy_nur,therapy.nur,model_oeh_therapy,group_hospital_nurse,1,0,0,0
+access_dental_doc,dental.doc,model_oeh_dental,group_hospital_doctor,1,1,1,1
+access_dental_nur,dental.nur,model_oeh_dental,group_hospital_nurse,1,0,0,0
+access_gynecology_doc,gynecology.doc,model_oeh_gynecology,group_hospital_doctor,1,1,1,1
+access_gynecology_nur,gynecology.nur,model_oeh_gynecology,group_hospital_nurse,1,0,0,0
+access_building_nur,building.nur,model_oeh_building,group_hospital_nurse,1,1,0,0
+access_building_rec,building.rec,model_oeh_building,group_hospital_receptionist,1,0,0,0
+access_building_doc,building.doc,model_oeh_building,group_hospital_doctor,1,0,0,0
+access_ward_nur,ward.nur,model_oeh_ward,group_hospital_nurse,1,1,1,1
+access_ward_rec,ward.rec,model_oeh_ward,group_hospital_receptionist,1,0,0,0
+access_ward_doc,ward.doc,model_oeh_ward,group_hospital_doctor,1,0,0,0
+access_bed_nur,bed.nur,model_oeh_bed,group_hospital_nurse,1,1,1,1
+access_bed_rec,bed.rec,model_oeh_bed,group_hospital_receptionist,1,0,0,0
+access_bed_doc,bed.doc,model_oeh_bed,group_hospital_doctor,1,0,0,0
+access_ipd_nur,ipd.nur,model_oeh_ipd,group_hospital_nurse,1,1,1,1
+access_ipd_doc,ipd.doc,model_oeh_ipd,group_hospital_doctor,1,1,1,1
+access_ipd_rec,ipd.rec,model_oeh_ipd,group_hospital_receptionist,1,0,0,0
+access_ipd_bil,ipd.bil,model_oeh_ipd,group_hospital_billing,1,0,0,0
+access_icu_nur,icu.nur,model_oeh_icu,group_hospital_nurse,1,1,1,1
+access_icu_doc,icu.doc,model_oeh_icu,group_hospital_doctor,1,1,1,1
+access_emergency_nur,emergency.nur,model_oeh_emergency,group_hospital_nurse,1,1,1,1
+access_emergency_doc,emergency.doc,model_oeh_emergency,group_hospital_doctor,1,1,1,1
+access_emergency_rec,emergency.rec,model_oeh_emergency,group_hospital_receptionist,1,1,1,1
+access_nursing_nur,nursing.nur,model_oeh_nursing,group_hospital_nurse,1,1,1,1
+access_nursing_doc,nursing.doc,model_oeh_nursing,group_hospital_doctor,1,0,0,0
+access_campus_nur,campus.nur,model_oeh_campus,group_hospital_nurse,1,1,0,0
+access_campus_rec,campus.rec,model_oeh_campus,group_hospital_receptionist,1,0,0,0
+access_payment_bil,payment.bil,model_oeh_payment,group_hospital_billing,1,1,1,1
+access_insurance_ins,insurance.ins,model_oeh_insurance_claim,group_hospital_insurance,1,1,1,1
+access_insurance_bil,insurance.bil,model_oeh_insurance_claim,group_hospital_billing,1,1,1,1
+access_hcfa_ins,hcfa.ins,model_oeh_hcfa,group_hospital_insurance,1,1,1,1
+access_hcfa_bil,hcfa.bil,model_oeh_hcfa,group_hospital_billing,1,0,0,0
+access_preauth_ins,preauth.ins,model_oeh_pre_authorization,group_hospital_insurance,1,1,1,1
+access_preauth_bil,preauth.bil,model_oeh_pre_authorization,group_hospital_billing,1,0,0,0
+access_communication_rec,communication.rec,model_oeh_communication,group_hospital_receptionist,1,1,1,1
+access_communication_doc,communication.doc,model_oeh_communication,group_hospital_doctor,1,1,1,1
+access_communication_nur,communication.nur,model_oeh_communication,group_hospital_nurse,1,1,1,1
+access_communication_bil,communication.bil,model_oeh_communication,group_hospital_billing,1,1,1,1
+access_dashboard_mgr,dashboard.mgr,model_oeh_dashboard,group_hospital_manager,1,1,1,1
+access_product_product_pha,product.product.pha,product.model_product_product,group_hospital_pharmacist,1,1,0,0
+access_product_product_bil,product.product.bil,product.model_product_product,group_hospital_billing,1,1,0,0
+access_product_category_pha,product.category.pha,product.model_product_category,group_hospital_pharmacist,1,0,0,0
+access_stock_move_pharmacist,stock.move pharmacist,stock.model_stock_move,group_hospital_pharmacist,1,0,0,0
+access_stock_quant_pharmacist,stock.quant pharmacist,stock.model_stock_quant,group_hospital_pharmacist,1,0,0,0
+access_account_move_pharmacist,account.move pharmacist,account.model_account_move,group_hospital_pharmacist,1,0,0,0
+access_stock_picking_pharmacist,stock.picking pharmacist,stock.model_stock_picking,group_hospital_pharmacist,1,0,0,0
+
+access_lab_test_type_lab,lab.test.type.lab,model_oeh_lab_test_type,group_hospital_lab,1,1,1,1
+access_lab_test_type_doc,lab.test.type.doc,model_oeh_lab_test_type,group_hospital_doctor,1,0,0,0
+access_lab_test_case_lab,lab.test.case.lab,model_oeh_lab_test_case,group_hospital_lab,1,1,1,1
+access_lab_test_case_doc,lab.test.case.doc,model_oeh_lab_test_case,group_hospital_doctor,1,0,0,0
+access_lab_result_lab,lab.result.lab,model_oeh_lab_test_result,group_hospital_lab,1,1,1,1
+access_lab_result_doc,lab.result.doc,model_oeh_lab_test_result,group_hospital_doctor,1,0,0,0
+access_lab_result_nur,lab.result.nur,model_oeh_lab_test_result,group_hospital_nurse,1,0,0,0
+access_lab_result_line_lab,lab.result.line.lab,model_oeh_lab_test_result_line,group_hospital_lab,1,1,1,1
+access_lab_result_line_doc,lab.result.line.doc,model_oeh_lab_test_result_line,group_hospital_doctor,1,0,0,0
+
+access_doctor_dashboard,doctor.dashboard,model_oeh_doctor_dashboard,group_hospital_doctor,1,1,1,1
+access_manager_oeh_patient,Hospital Manager model_oeh_patient,model_oeh_patient,group_hospital_manager,1,1,1,1
+access_manager_patient_allergy,Hospital Manager model_patient_allergy,model_patient_allergy,group_hospital_manager,1,1,1,1
+access_manager_patient_history,Hospital Manager model_patient_history,model_patient_history,group_hospital_manager,1,1,1,1
+access_manager_patient_vaccination,Hospital Manager model_patient_vaccination,model_patient_vaccination,group_hospital_manager,1,1,1,1
+access_manager_patient_visit,Hospital Manager model_patient_visit,model_patient_visit,group_hospital_manager,1,1,1,1
+access_manager_oeh_doctor,Hospital Manager model_oeh_doctor,model_oeh_doctor,group_hospital_manager,1,1,1,1
+access_manager_doctor_schedule,Hospital Manager model_doctor_schedule,model_doctor_schedule,group_hospital_manager,1,1,1,1
+access_manager_oeh_appointment,Hospital Manager model_oeh_appointment,model_oeh_appointment,group_hospital_manager,1,1,1,1
+access_manager_oeh_followup,Hospital Manager model_oeh_followup,model_oeh_followup,group_hospital_manager,1,1,1,1
+access_manager_oeh_queue,Hospital Manager model_oeh_queue,model_oeh_queue,group_hospital_manager,1,1,1,1
+access_manager_oeh_clinical,Hospital Manager model_oeh_clinical,model_oeh_clinical,group_hospital_manager,1,1,1,1
+access_manager_oeh_prescription,Hospital Manager model_oeh_prescription,model_oeh_prescription,group_hospital_manager,1,1,1,1
+access_manager_oeh_prescription_line,Hospital Manager model_oeh_prescription_line,model_oeh_prescription_line,group_hospital_manager,1,1,1,1
+access_manager_oeh_treatment,Hospital Manager model_oeh_treatment,model_oeh_treatment,group_hospital_manager,1,1,1,1
+access_manager_oeh_certificate,Hospital Manager model_oeh_certificate,model_oeh_certificate,group_hospital_manager,1,1,1,1
+access_manager_oeh_icd,Hospital Manager model_oeh_icd,model_oeh_icd,group_hospital_manager,1,1,1,1
+access_manager_oeh_consent,Hospital Manager model_oeh_consent,model_oeh_consent,group_hospital_manager,1,1,1,1
+access_manager_oeh_laboratory,Hospital Manager model_oeh_laboratory,model_oeh_laboratory,group_hospital_manager,1,1,1,1
+access_manager_oeh_sample,Hospital Manager model_oeh_sample,model_oeh_sample,group_hospital_manager,1,1,1,1
+access_manager_oeh_radiology,Hospital Manager model_oeh_radiology,model_oeh_radiology,group_hospital_manager,1,1,1,1
+access_manager_oehealth_surgery,Hospital Manager model_oehealth_surgery,model_oehealth_surgery,group_hospital_manager,1,1,1,1
+access_manager_oehealth_ot_schedule,Hospital Manager model_oehealth_ot_schedule,model_oehealth_ot_schedule,group_hospital_manager,1,1,1,1
+access_manager_oehealth_surgical_team,Hospital Manager model_oehealth_surgical_team,model_oehealth_surgical_team,group_hospital_manager,1,1,1,1
+access_manager_oehealth_anesthesia_record,Hospital Manager model_oehealth_anesthesia_record,model_oehealth_anesthesia_record,group_hospital_manager,1,1,1,1
+access_manager_oeh_medicine_batch,Hospital Manager model_oeh_medicine_batch,model_oeh_medicine_batch,group_hospital_manager,1,1,1,1
+access_manager_oeh_pediatric,Hospital Manager model_oeh_pediatric,model_oeh_pediatric,group_hospital_manager,1,1,1,1
+access_manager_oeh_therapy,Hospital Manager model_oeh_therapy,model_oeh_therapy,group_hospital_manager,1,1,1,1
+access_manager_oeh_dental,Hospital Manager model_oeh_dental,model_oeh_dental,group_hospital_manager,1,1,1,1
+access_manager_oeh_gynecology,Hospital Manager model_oeh_gynecology,model_oeh_gynecology,group_hospital_manager,1,1,1,1
+access_manager_oeh_building,Hospital Manager model_oeh_building,model_oeh_building,group_hospital_manager,1,1,1,1
+access_manager_oeh_ward,Hospital Manager model_oeh_ward,model_oeh_ward,group_hospital_manager,1,1,1,1
+access_manager_oeh_bed,Hospital Manager model_oeh_bed,model_oeh_bed,group_hospital_manager,1,1,1,1
+access_manager_oeh_ipd,Hospital Manager model_oeh_ipd,model_oeh_ipd,group_hospital_manager,1,1,1,1
+access_manager_oeh_icu,Hospital Manager model_oeh_icu,model_oeh_icu,group_hospital_manager,1,1,1,1
+access_manager_oeh_emergency,Hospital Manager model_oeh_emergency,model_oeh_emergency,group_hospital_manager,1,1,1,1
+access_manager_oeh_nursing,Hospital Manager model_oeh_nursing,model_oeh_nursing,group_hospital_manager,1,1,1,1
+access_manager_oeh_campus,Hospital Manager model_oeh_campus,model_oeh_campus,group_hospital_manager,1,1,1,1
+access_manager_oeh_payment,Hospital Manager model_oeh_payment,model_oeh_payment,group_hospital_manager,1,1,1,1
+access_manager_oeh_insurance_claim,Hospital Manager model_oeh_insurance_claim,model_oeh_insurance_claim,group_hospital_manager,1,1,1,1
+access_manager_oeh_hcfa,Hospital Manager model_oeh_hcfa,model_oeh_hcfa,group_hospital_manager,1,1,1,1
+access_manager_oeh_pre_authorization,Hospital Manager model_oeh_pre_authorization,model_oeh_pre_authorization,group_hospital_manager,1,1,1,1
+access_manager_oeh_communication,Hospital Manager model_oeh_communication,model_oeh_communication,group_hospital_manager,1,1,1,1
+access_manager_product_product_product,Hospital Manager product.model_product_product,product.model_product_product,group_hospital_manager,1,1,1,1
+access_manager_product_product_category,Hospital Manager product.model_product_category,product.model_product_category,group_hospital_manager,1,1,1,1
+access_manager_stock_stock_move,Hospital Manager stock.model_stock_move,stock.model_stock_move,group_hospital_manager,1,1,1,1
+access_manager_stock_stock_quant,Hospital Manager stock.model_stock_quant,stock.model_stock_quant,group_hospital_manager,1,1,1,1
+access_manager_account_account_move,Hospital Manager account.model_account_move,account.model_account_move,group_hospital_manager,1,1,1,1
+access_manager_stock_stock_picking,Hospital Manager stock.model_stock_picking,stock.model_stock_picking,group_hospital_manager,1,1,1,1
+access_manager_oeh_lab_test_type,Hospital Manager model_oeh_lab_test_type,model_oeh_lab_test_type,group_hospital_manager,1,1,1,1
+access_manager_oeh_lab_test_case,Hospital Manager model_oeh_lab_test_case,model_oeh_lab_test_case,group_hospital_manager,1,1,1,1
+access_manager_oeh_lab_test_result,Hospital Manager model_oeh_lab_test_result,model_oeh_lab_test_result,group_hospital_manager,1,1,1,1
+access_manager_oeh_lab_test_result_line,Hospital Manager model_oeh_lab_test_result_line,model_oeh_lab_test_result_line,group_hospital_manager,1,1,1,1
+access_manager_oeh_doctor_dashboard,Hospital Manager model_oeh_doctor_dashboard,model_oeh_doctor_dashboard,group_hospital_manager,1,1,1,1
+access_billing_bil,billing.bil,model_oeh_billing,group_hospital_billing,1,1,1,1
+access_manager_oeh_billing,Hospital Manager model_oeh_billing,model_oeh_billing,group_hospital_manager,1,1,1,1
+access_icu_vitals_history_nur,ICU Vitals History Nurse,model_oeh_icu_vitals_history,group_hospital_nurse,1,1,0,0
+access_icu_vitals_history_doc,ICU Vitals History Doctor,model_oeh_icu_vitals_history,group_hospital_doctor,1,1,0,0
+access_icu_vitals_history_manager,ICU Vitals History Manager,model_oeh_icu_vitals_history,group_hospital_manager,1,1,1,1

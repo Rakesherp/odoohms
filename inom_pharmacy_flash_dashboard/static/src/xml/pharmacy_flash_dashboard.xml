@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="inom_pharmacy_flash_dashboard.Dashboard">
+        <div class="o_pharmacy_flash_dashboard">
+            <div t-if="state.loading" class="o_pfd_loading">
+                <div class="o_pfd_spinner"><i class="fa fa-medkit" title="Medkit" aria-label="Medkit"/></div>
+                <strong>Preparing Pharmacy Flash...</strong>
+                <span>Loading live stock and batch alerts</span>
+            </div>
+
+            <t t-elif="state.error">
+                <div class="o_pfd_error">
+                    <div class="o_pfd_error_icon"><i class="fa fa-exclamation-circle" title="Exclamation Circle" aria-label="Exclamation Circle"/></div>
+                    <strong>Unable to load pharmacy alerts</strong>
+                    <span>Please refresh the dashboard or check your access rights.</span>
+                    <button class="o_pfd_error_button" t-on-click="refresh">
+                        <i class="fa fa-refresh" title="Refresh" aria-label="Refresh"/> Retry
+                    </button>
+                </div>
+            </t>
+
+            <t t-else="">
+                <div class="o_pfd_shell">
+                    <!-- HEADER -->
+                    <header class="o_pfd_header">
+                        <div class="o_pfd_brand">
+                            <div class="o_pfd_brand_icon"><i class="fa fa-medkit" title="Medkit" aria-label="Medkit"/></div>
+                            <div>
+                                <div class="o_pfd_title">INOM HOSPITAL</div>
+                                <div class="o_pfd_subtitle">PHARMACY FLASH DASHBOARD</div>
+                            </div>
+                        </div>
+
+                        <div class="o_pfd_datetime">
+                            <div class="o_pfd_clock"><i class="fa fa-clock-o" title="Clock O" aria-label="Clock O"/> <t t-esc="formatUpdated()"/></div>
+                            <div class="o_pfd_date"><t t-esc="formatDate()"/></div>
+                        </div>
+
+                        <div class="o_pfd_market">
+                            <div class="o_pfd_market_icon"><i class="fa fa-eyedropper" title="Eyedropper" aria-label="Eyedropper"/></div>
+                            <div>
+                                <div class="o_pfd_market_title">PHARMACY</div>
+                                <div class="o_pfd_market_subtitle">STOCK MARKET</div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- KPI CARDS: only the three required metrics -->
+                    <div class="o_pfd_kpi_grid">
+                        <div class="o_pfd_kpi o_pfd_kpi_green">
+                            <div class="o_pfd_kpi_icon"><i class="fa fa-medkit" title="Medkit" aria-label="Medkit"/></div>
+                            <div>
+                                <div class="o_pfd_kpi_label">TOTAL MEDICINES</div>
+                                <div class="o_pfd_kpi_value"><t t-esc="formatNumber(state.data.total_medicines)"/></div>
+                                <div class="o_pfd_kpi_hint">Active Medicines</div>
+                            </div>
+                        </div>
+
+                        <div class="o_pfd_kpi o_pfd_kpi_red">
+                            <div class="o_pfd_kpi_icon"><i class="fa fa-bell" title="Bell" aria-label="Bell"/></div>
+                            <div>
+                                <div class="o_pfd_kpi_label">LOW STOCK ALERT</div>
+                                <div class="o_pfd_kpi_value"><t t-esc="state.data.low_stock.count"/></div>
+                                <div class="o_pfd_kpi_hint">Reorder Soon</div>
+                            </div>
+                        </div>
+
+                        <div class="o_pfd_kpi o_pfd_kpi_purple">
+                            <div class="o_pfd_kpi_icon"><i class="fa fa-hourglass-half" title="Hourglass Half" aria-label="Hourglass Half"/></div>
+                            <div>
+                                <div class="o_pfd_kpi_label">EXPIRY ALERT</div>
+                                <div class="o_pfd_kpi_value"><t t-esc="state.data.expiry.count"/></div>
+                                <div class="o_pfd_kpi_hint">Expiring Soon</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ALERT LISTS -->
+                    <div class="o_pfd_alert_grid">
+                        <!-- LOW STOCK -->
+                        <section class="o_pfd_alert_card o_pfd_stock_card"
+                                 t-on-mouseenter="() => this.state.paused = true"
+                                 t-on-mouseleave="() => this.state.paused = false">
+                            <div class="o_pfd_card_head">
+                                <div class="o_pfd_card_heading">
+                                    <div class="o_pfd_card_icon o_pfd_red_icon"><i class="fa fa-bell" title="Bell" aria-label="Bell"/></div>
+                                    <div>
+                                        <div class="o_pfd_card_title">LOW STOCK ALERT</div>
+                                        <div class="o_pfd_card_caption">
+                                            <t t-esc="state.data.low_stock.count"/> medicines need attention
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="o_pfd_view_all" t-on-click.stop="() => this.openFeed('low_stock')">
+                                    View All <i class="fa fa-angle-right" title="Angle Right" aria-label="Angle Right"/>
+                                </button>
+                            </div>
+
+                            <div t-if="state.data.low_stock.items.length"
+                                 class="o_pfd_vertical_marquee"
+                                 data-feed="low_stock">
+                                <div t-att-class="'o_pfd_vertical_track' + (state.paused ? ' is-paused' : '')">
+                                    <div class="o_pfd_marquee_group">
+                                        <div t-foreach="state.data.low_stock.items" t-as="item"
+                                             t-key="'low-a-' + item.id"
+                                             class="o_pfd_stock_row"
+                                             t-on-click="() => this.openProduct(item)">
+                                            <div class="o_pfd_row_icon"><i class="fa fa-bell" title="Bell" aria-label="Bell"/></div>
+                                            <div class="o_pfd_row_name">
+                                                <strong><t t-esc="item.name"/></strong>
+                                                <span t-if="item.generic_name or item.strength">
+                                                    <t t-if="item.generic_name"><t t-esc="item.generic_name"/></t>
+                                                    <t t-if="item.generic_name and item.strength"> • </t>
+                                                    <t t-if="item.strength"><t t-esc="item.strength"/></t>
+                                                </span>
+                                            </div>
+                                            <span t-attf-class="o_pfd_status o_pfd_status_{{item.level}}">
+                                                <t t-esc="item.level_label"/>
+                                            </span>
+                                            <div class="o_pfd_qty">
+                                                <strong><t t-esc="formatNumber(item.on_hand)"/></strong>
+                                                <span><t t-esc="item.uom"/></span>
+                                            </div>
+                                            <div class="o_pfd_row_arrow"><i class="fa fa-chevron-right" title="Chevron Right" aria-label="Chevron Right"/></div>
+                                        </div>
+                                    </div>
+                                    <div class="o_pfd_marquee_group" aria-hidden="true">
+                                        <div t-foreach="state.data.low_stock.items" t-as="item"
+                                             t-key="'low-b-' + item.id"
+                                             class="o_pfd_stock_row">
+                                            <div class="o_pfd_row_icon"><i class="fa fa-bell" title="Bell" aria-label="Bell"/></div>
+                                            <div class="o_pfd_row_name">
+                                                <strong><t t-esc="item.name"/></strong>
+                                                <span t-if="item.generic_name or item.strength">
+                                                    <t t-if="item.generic_name"><t t-esc="item.generic_name"/></t>
+                                                    <t t-if="item.generic_name and item.strength"> • </t>
+                                                    <t t-if="item.strength"><t t-esc="item.strength"/></t>
+                                                </span>
+                                            </div>
+                                            <span t-attf-class="o_pfd_status o_pfd_status_{{item.level}}">
+                                                <t t-esc="item.level_label"/>
+                                            </span>
+                                            <div class="o_pfd_qty">
+                                                <strong><t t-esc="formatNumber(item.on_hand)"/></strong>
+                                                <span><t t-esc="item.uom"/></span>
+                                            </div>
+                                            <div class="o_pfd_row_arrow"><i class="fa fa-chevron-right" title="Chevron Right" aria-label="Chevron Right"/></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div t-else="" class="o_pfd_empty">
+                                <div class="o_pfd_empty_icon"><i class="fa fa-check-circle" title="Check Circle" aria-label="Check Circle"/></div>
+                                <strong>All clear</strong>
+                                <span>No low-stock medicines right now.</span>
+                            </div>
+
+                            <div class="o_pfd_scroll_hint">
+                                <i class="fa fa-long-arrow-up" title="Long Arrow Up" aria-label="Long Arrow Up"/> Auto scrolling upward
+                            </div>
+                        </section>
+
+                        <!-- EXPIRY -->
+                        <section class="o_pfd_alert_card o_pfd_expiry_card"
+                                 t-on-mouseenter="() => this.state.paused = true"
+                                 t-on-mouseleave="() => this.state.paused = false">
+                            <div class="o_pfd_card_head">
+                                <div class="o_pfd_card_heading">
+                                    <div class="o_pfd_card_icon o_pfd_purple_icon"><i class="fa fa-calendar" title="Calendar" aria-label="Calendar"/></div>
+                                    <div>
+                                        <div class="o_pfd_card_title">EXPIRY ALERT</div>
+                                        <div class="o_pfd_card_caption">
+                                            <t t-esc="state.data.expiry.count"/> lots • next 90 days
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="o_pfd_view_all" t-on-click.stop="() => this.openFeed('expiry')">
+                                    View All <i class="fa fa-angle-right" title="Angle Right" aria-label="Angle Right"/>
+                                </button>
+                            </div>
+
+                            <div t-if="state.data.expiry.items.length"
+                                 class="o_pfd_vertical_marquee"
+                                 data-feed="expiry">
+                                <div t-att-class="'o_pfd_vertical_track' + (state.paused ? ' is-paused' : '')">
+                                    <div class="o_pfd_marquee_group">
+                                        <div t-foreach="state.data.expiry.items" t-as="batch"
+                                             t-key="'exp-a-' + batch.id"
+                                             class="o_pfd_expiry_row"
+                                             t-on-click="() => this.openLot(batch)">
+                                            <div t-attf-class="o_pfd_date_badge o_pfd_date_{{expiryClass(batch)}}">
+                                                <strong><t t-esc="batch.expiry_date.substring(8, 10)"/></strong>
+                                                <span><t t-esc="batch.expiry_date.substring(5, 7)"/></span>
+                                            </div>
+                                            <div class="o_pfd_row_name">
+                                                <strong><t t-esc="batch.medicine"/></strong>
+                                                <span>Batch <t t-esc="batch.batch_no"/></span>
+                                            </div>
+                                            <div class="o_pfd_expiry_days">
+                                                <strong t-if="batch.days_left &gt;= 0"><t t-esc="batch.days_left"/> Days Left</strong>
+                                                <strong t-else=""><t t-esc="formatOverdueDays(batch.days_left)"/> Days Overdue</strong>
+                                            </div>
+                                            <div class="o_pfd_row_arrow"><i class="fa fa-chevron-right" title="Chevron Right" aria-label="Chevron Right"/></div>
+                                        </div>
+                                    </div>
+                                    <div class="o_pfd_marquee_group" aria-hidden="true">
+                                        <div t-foreach="state.data.expiry.items" t-as="batch"
+                                             t-key="'exp-b-' + batch.id"
+                                             class="o_pfd_expiry_row">
+                                            <div t-attf-class="o_pfd_date_badge o_pfd_date_{{expiryClass(batch)}}">
+                                                <strong><t t-esc="batch.expiry_date.substring(8, 10)"/></strong>
+                                                <span><t t-esc="batch.expiry_date.substring(5, 7)"/></span>
+                                            </div>
+                                            <div class="o_pfd_row_name">
+                                                <strong><t t-esc="batch.medicine"/></strong>
+                                                <span>Batch <t t-esc="batch.batch_no"/></span>
+                                            </div>
+                                            <div class="o_pfd_expiry_days">
+                                                <strong t-if="batch.days_left &gt;= 0"><t t-esc="batch.days_left"/> Days Left</strong>
+                                                <strong t-else=""><t t-esc="formatOverdueDays(batch.days_left)"/> Days Overdue</strong>
+                                            </div>
+                                            <div class="o_pfd_row_arrow"><i class="fa fa-chevron-right" title="Chevron Right" aria-label="Chevron Right"/></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div t-else="" class="o_pfd_empty">
+                                <div class="o_pfd_empty_icon"><i class="fa fa-calendar-check-o" title="Calendar Check O" aria-label="Calendar Check O"/></div>
+                                <strong>No expiry alerts</strong>
+                                <span>No available batch expires within 90 days.</span>
+                            </div>
+
+                            <div class="o_pfd_scroll_hint o_pfd_scroll_hint_purple">
+                                <i class="fa fa-long-arrow-up" title="Long Arrow Up" aria-label="Long Arrow Up"/> Auto scrolling upward
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- FLASH NEWS -->
+                    <div class="o_pfd_flash_news">
+                        <div class="o_pfd_flash_label"><i class="fa fa-bullhorn" title="Bullhorn" aria-label="Bullhorn"/> FLASH NEWS</div>
+                        <div class="o_pfd_flash_track">
+                            <div class="o_pfd_flash_content">
+                                <span><i class="fa fa-caret-up" title="Caret Up" aria-label="Caret Up"/> <t t-esc="state.data.low_stock.count"/> medicines currently below reorder level</span>
+                                <span><i class="fa fa-caret-up" title="Caret Up" aria-label="Caret Up"/> <t t-esc="state.data.expiry.count"/> batches need expiry attention</span>
+                                <span><i class="fa fa-caret-up" title="Caret Up" aria-label="Caret Up"/> Review low-stock medicines and place purchase orders</span>
+                                <span><i class="fa fa-caret-up" title="Caret Up" aria-label="Caret Up"/> Check FEFO batches before issuing medicines</span>
+                                <span><i class="fa fa-caret-up" title="Caret Up" aria-label="Caret Up"/> Dashboard refreshes every 60 seconds</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="o_pfd_footer">
+                        <span><i class="fa fa-info-circle" title="Info Circle" aria-label="Info Circle"/> Hover over an alert panel to pause scrolling</span>
+                        <span><i class="fa fa-refresh" title="Refresh" aria-label="Refresh"/> Last sync <t t-esc="formatUpdated()"/></span>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

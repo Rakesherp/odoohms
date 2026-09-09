@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_disease_tree" model="ir.ui.view">
+        <field name="name">oeh.disease.list</field>
+        <field name="model">oeh.disease</field>
+        <field name="arch" type="xml">
+            <list string="Disease Master" decoration-muted="active == False">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="category" optional="hide"/>
+                <field name="description" optional="hide"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_disease_form" model="ir.ui.view">
+        <field name="name">oeh.disease.form</field>
+        <field name="model">oeh.disease</field>
+        <field name="arch" type="xml">
+            <form string="Disease">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Disease Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Disease Information">
+                            <field name="code"/>
+                            <field name="category_id"/>
+                            <field name="category" invisible="1"/>
+                        </group>
+                        <group string="Status">
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1" placeholder="Clinical description..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_disease_search" model="ir.ui.view">
+        <field name="name">oeh.disease.search</field>
+        <field name="model">oeh.disease</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category_id"/>
+                <field name="category"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="inactive" string="Archived" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="group_category" string="Category" context="{'group_by': 'category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_disease_master" model="ir.actions.act_window">
+        <field name="name">Disease Master</field>
+        <field name="res_model">oeh.disease</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_disease_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <menuitem id="menu_disease_master"
+              name="Disease Master"
+              parent="inom_healthcare_system.menu_clinical"
+              action="action_disease_master"
+              groups="inom_healthcare_system.group_hospital_manager,inom_healthcare_system.group_hospital_doctor,inom_healthcare_system.group_hospital_receptionist"
+              sequence="55"/>
+
+    <record id="view_disease_category_tree" model="ir.ui.view">
+        <field name="name">oeh.disease.category.list</field>
+        <field name="model">oeh.disease.category</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="active == False">
+                <field name="name"/>
+                <field name="description" optional="hide"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_disease_category_form" model="ir.ui.view">
+        <field name="name">oeh.disease.category.form</field>
+        <field name="model">oeh.disease.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group><field name="active"/></group>
+                    <field name="description" placeholder="Category description..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_disease_category" model="ir.actions.act_window">
+        <field name="name">Disease Categories</field>
+        <field name="res_model">oeh.disease.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_disease_category" name="Disease Categories" parent="menu_disease_master" action="action_disease_category" groups="inom_healthcare_system.group_hospital_manager,inom_healthcare_system.group_hospital_doctor,inom_healthcare_system.group_hospital_receptionist" sequence="10"/>
+
+</odoo>

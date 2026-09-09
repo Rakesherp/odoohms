@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="inom_healthcare_system.DoctorDashboard">
+        <div class="o_inom_doctor_dashboard">
+            <div t-if="state.loading" class="o_drd_loading">
+                <i class="fa fa-spinner fa-spin" title="Loading" aria-label="Loading"/>
+                <span>Preparing your clinical workspace…</span>
+            </div>
+
+            <t t-elif="state.data.doctor_found">
+                <div class="o_drd_header">
+                    <div>
+                        <div class="o_drd_eyebrow">DOCTOR WORKSPACE</div>
+                        <h1>
+                            Good morning, Dr.
+                            <t t-esc="state.data.doctor.name"/>
+                        </h1>
+                        <p>
+                            <t t-esc="state.data.doctor.specialization || 'Clinical Practice'"/>
+                            <span> • </span>
+                            <t t-esc="state.data.today_label"/>
+                        </p>
+                    </div>
+                    <div class="o_drd_header_actions">
+                        <div t-if="state.data.doctor.current_patient" class="o_drd_now">
+                            <span>NOW SERVING</span>
+                            <strong>#<t t-esc="state.data.doctor.now_serving"/></strong>
+                            <em><t t-esc="state.data.doctor.current_patient"/></em>
+                        </div>
+                        <button type="button" class="o_drd_refresh" t-on-click="refresh">
+                            <i class="fa fa-refresh" title="Refresh" aria-label="Refresh"/> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <div class="o_drd_kpis">
+                    <div class="o_drd_kpi blue" t-on-click="() => this.quickAction('appointments')">
+                        <i class="fa fa-calendar-check-o" title="Appointments" aria-label="Appointments"/>
+                        <div>
+                            <strong><t t-esc="state.data.kpis.appointments"/></strong>
+                            <span>Today's Appointments</span>
+                        </div>
+                    </div>
+                    <div class="o_drd_kpi orange" t-on-click="() => this.quickAction('queue')">
+                        <i class="fa fa-hourglass-half" title="Waiting" aria-label="Waiting"/>
+                        <div>
+                            <strong><t t-esc="state.data.kpis.waiting"/></strong>
+                            <span>Waiting Patients</span>
+                        </div>
+                    </div>
+                    <div class="o_drd_kpi teal">
+                        <i class="fa fa-stethoscope" title="Consultation" aria-label="Consultation"/>
+                        <div>
+                            <strong><t t-esc="state.data.kpis.in_consultation"/></strong>
+                            <span>In Consultation</span>
+                        </div>
+                    </div>
+                    <div class="o_drd_kpi green">
+                        <i class="fa fa-check-circle" title="Completed" aria-label="Completed"/>
+                        <div>
+                            <strong><t t-esc="state.data.kpis.completed"/></strong>
+                            <span>Completed Today</span>
+                        </div>
+                    </div>
+                    <div class="o_drd_kpi purple">
+                        <i class="fa fa-repeat" title="Follow-ups" aria-label="Follow-ups"/>
+                        <div>
+                            <strong><t t-esc="state.data.kpis.followups"/></strong>
+                            <span>Follow-ups Due</span>
+                        </div>
+                    </div>
+                    <div class="o_drd_kpi red">
+                        <i class="fa fa-flask" title="Laboratory" aria-label="Laboratory"/>
+                        <div>
+                            <strong><t t-esc="state.data.kpis.pending_labs"/></strong>
+                            <span>Pending Lab</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="o_drd_alerts" t-if="state.data.alerts.length">
+                    <div
+                        t-foreach="state.data.alerts"
+                        t-as="alert"
+                        t-key="alert.key"
+                        t-attf-class="o_drd_alert {{alert.level}}"
+                    >
+                        <i t-attf-class="fa {{alert.icon}}" title="Clinical alert" aria-label="Clinical alert"/>
+                        <div>
+                            <strong><t t-esc="alert.title"/></strong>
+                            <span><t t-esc="alert.text"/></span>
+                        </div>
+                        <b><t t-esc="alert.count"/></b>
+                    </div>
+                </div>
+
+                <div class="o_drd_main_grid">
+                    <section class="o_drd_card o_drd_appointments">
+                        <div class="o_drd_card_head">
+                            <div>
+                                <h3>Today's Appointments</h3>
+                                <p>Your consultation worklist</p>
+                            </div>
+                            <button type="button" t-on-click="() => this.quickAction('appointments')">
+                                View All <i class="fa fa-angle-right" title="Open" aria-label="Open"/>
+                            </button>
+                        </div>
+
+                        <div t-if="state.data.appointments.length" class="o_drd_table_wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Patient</th>
+                                        <th>Token</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.data.appointments" t-as="appt" t-key="appt.id">
+                                        <td class="o_drd_time"><t t-esc="appt.time"/></td>
+                                        <td>
+                                            <div
+                                                class="o_drd_patient_name"
+                                                t-on-click="() => this.openPatient(appt.patient_id)"
+                                            >
+                                                <t t-esc="appt.patient"/>
+                                            </div>
+                                            <small><t t-esc="appt.patient_code"/></small>
+                                            <span t-if="appt.has_allergy" class="o_drd_allergy">
+                                                <i class="fa fa-exclamation-triangle" title="Allergy" aria-label="Allergy"/> Allergy
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="o_drd_token">
+                                                <t t-esc="appt.token || '—'"/>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span t-attf-class="o_drd_badge {{this.stateClass(appt.state)}}">
+                                                <t t-esc="appt.state_label"/>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button
+                                                class="o_drd_consult_btn"
+                                                t-if="appt.state === 'confirm' || appt.state === 'progress'"
+                                                t-on-click="() => this.openConsultation(appt.id)"
+                                            >
+                                                <i class="fa fa-stethoscope" title="Consultation" aria-label="Consultation"/> Consult
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div t-else="" class="o_drd_no_data">
+                            <i class="fa fa-calendar-o" title="Calendar" aria-label="Calendar"/>
+                            <span>No appointments scheduled today.</span>
+                        </div>
+                    </section>
+
+                    <section class="o_drd_card">
+                        <div class="o_drd_card_head">
+                            <div>
+                                <h3>My Queue</h3>
+                                <p>Patients checked in today</p>
+                            </div>
+                            <button type="button" t-on-click="() => this.quickAction('queue')">
+                                Open Queue <i class="fa fa-angle-right" title="Open" aria-label="Open"/>
+                            </button>
+                        </div>
+                        <div class="o_drd_queue">
+                            <t t-if="state.data.queue.length">
+                                <div
+                                    t-foreach="state.data.queue"
+                                    t-as="item"
+                                    t-key="item.id"
+                                    class="o_drd_queue_row"
+                                >
+                                    <div class="o_drd_big_token"><t t-esc="item.token"/></div>
+                                    <div
+                                        class="o_drd_queue_patient"
+                                        t-on-click="() => this.openPatient(item.patient_id)"
+                                    >
+                                        <strong><t t-esc="item.patient"/></strong>
+                                        <span><t t-esc="item.patient_code"/></span>
+                                    </div>
+                                    <span t-attf-class="o_drd_badge {{this.stateClass(item.state)}}">
+                                        <t t-esc="item.state_label"/>
+                                    </span>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="o_drd_no_data small">
+                                    <i class="fa fa-users" title="Queue" aria-label="Queue"/> No patients in queue.
+                                </div>
+                            </t>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="o_drd_bottom_grid">
+                    <section class="o_drd_card">
+                        <div class="o_drd_card_head">
+                            <div>
+                                <h3>Today's Patients</h3>
+                                <p>Quick access to Patient 360</p>
+                            </div>
+                            <button type="button" t-on-click="() => this.quickAction('patients')">
+                                Patients <i class="fa fa-angle-right" title="Open" aria-label="Open"/>
+                            </button>
+                        </div>
+                        <div class="o_drd_patient_grid">
+                            <div
+                                t-foreach="state.data.patients"
+                                t-as="patient"
+                                t-key="patient.id"
+                                class="o_drd_patient_card"
+                                t-on-click="() => this.openPatient(patient.id)"
+                            >
+                                <div class="o_drd_avatar">
+                                    <t t-esc="patient.name.substring(0,1).toUpperCase()"/>
+                                </div>
+                                <div class="o_drd_patient_card_body">
+                                    <strong><t t-esc="patient.name"/></strong>
+                                    <span>
+                                        <t t-esc="patient.patient_code"/>
+                                        <t t-if="patient.age"> • <t t-esc="patient.age"/> yrs</t>
+                                        <t t-if="patient.gender"> • <t t-esc="patient.gender"/></t>
+                                    </span>
+                                    <span t-if="patient.blood_group">
+                                        Blood: <t t-esc="patient.blood_group"/>
+                                    </span>
+                                    <span t-if="patient.has_allergy" class="o_drd_card_allergy">
+                                        <i class="fa fa-exclamation-triangle" title="Warning" aria-label="Warning"/>
+                                        <t t-esc="patient.allergy_names"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="o_drd_card o_drd_quick">
+                        <div class="o_drd_card_head">
+                            <div>
+                                <h3>Quick Actions</h3>
+                                <p>Common clinical tasks</p>
+                            </div>
+                        </div>
+                        <div class="o_drd_quick_grid">
+                            <button type="button" t-on-click="() => this.quickAction('appointments')">
+                                <i class="fa fa-calendar"/> My Appointments
+                            </button>
+                            <button type="button" t-on-click="() => this.quickAction('queue')">
+                                <i class="fa fa-users" title="Queue" aria-label="Queue"/> My Queue
+                            </button>
+                            <button type="button" t-on-click="() => this.quickAction('prescriptions')">
+                                <i class="fa fa-medkit" title="Prescriptions" aria-label="Prescriptions"/> Prescriptions
+                            </button>
+                            <button type="button" t-on-click="() => this.quickAction('labs')">
+                                <i class="fa fa-flask" title="Laboratory" aria-label="Laboratory"/> Lab Requests
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </t>
+
+            <t t-else="">
+                <div class="o_drd_empty">
+                    <i class="fa fa-user-md" title="Doctor" aria-label="Doctor"/>
+                    <h3>Doctor profile is not linked</h3>
+                    <p>Please ask the Hospital Manager to link your Odoo user to a Doctor record.</p>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

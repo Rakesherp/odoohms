@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem name="Track Lot and Serial Expiry"
+              id="track_lot_and_serial_expiry"
+              parent="stock.menu_warehouse_report"
+              action="lot_serial_expiry_report_wizard_action"
+              sequence="240"/>
+</odoo>

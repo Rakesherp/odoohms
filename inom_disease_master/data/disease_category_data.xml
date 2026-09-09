@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="category_general_medicine" model="oeh.disease.category"><field name="name">General Medicine</field></record>
+    <record id="category_cardiology" model="oeh.disease.category"><field name="name">Cardiology</field></record>
+    <record id="category_respiratory" model="oeh.disease.category"><field name="name">Respiratory</field></record>
+    <record id="category_neurology" model="oeh.disease.category"><field name="name">Neurology</field></record>
+    <record id="category_gastroenterology" model="oeh.disease.category"><field name="name">Gastroenterology</field></record>
+    <record id="category_endocrine" model="oeh.disease.category"><field name="name">Endocrine</field></record>
+    <record id="category_infectious" model="oeh.disease.category"><field name="name">Infectious Disease</field></record>
+    <record id="category_dermatology" model="oeh.disease.category"><field name="name">Dermatology</field></record>
+    <record id="category_pediatrics" model="oeh.disease.category"><field name="name">Pediatrics</field></record>
+</odoo>

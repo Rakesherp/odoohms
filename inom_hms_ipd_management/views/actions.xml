@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="ipd_phase23_report_button_inherit"
+            model="ir.ui.view">
+
+        <field name="name">
+            oeh.ipd.form.ipd.management.report.button
+        </field>
+
+        <field name="model">oeh.ipd</field>
+
+        <field name="inherit_id"
+               ref="inom_healthcare_system.ipd_form"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+
+                <button name="%(action_report_phase23_discharge_summary)d"
+                        type="action"
+                        string="Print Detailed Summary"
+                        icon="fa-file-pdf-o"
+                        invisible="status not in ('discharged','closed')"/>
+
+            </xpath>
+
+        </field>
+
+    </record>
+
+</odoo>

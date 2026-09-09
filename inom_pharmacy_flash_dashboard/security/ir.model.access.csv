@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_oeh_pharmacy_flash_dashboard_manager,pharmacy.flash.dashboard.manager,model_oeh_pharmacy_flash_dashboard,inom_healthcare_system.group_hospital_manager,1,0,0,0
+access_oeh_pharmacy_flash_dashboard_pharmacist,pharmacy.flash.dashboard.pharmacist,model_oeh_pharmacy_flash_dashboard,inom_healthcare_system.group_hospital_pharmacist,1,0,0,0

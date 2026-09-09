@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_patient_form_medical_history_disease" model="ir.ui.view">
+        <field name="name">oeh.patient.form.medical.history.disease</field>
+        <field name="model">oeh.patient</field>
+        <field name="inherit_id" ref="inom_healthcare_system.patient_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='history_ids']/list/field[@name='disease']" position="replace">
+                <field name="disease_id"
+                       string="Disease"
+                       options="{'no_create': True, 'no_create_edit': True}"
+                       placeholder="Select disease..."/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

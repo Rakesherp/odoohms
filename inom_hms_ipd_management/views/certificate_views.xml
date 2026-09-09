@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="certificate_phase23_form_inherit" model="ir.ui.view">
+        <field name="name">oeh.certificate.form.phase23</field>
+        <field name="model">oeh.certificate</field>
+        <field name="inherit_id" ref="inom_healthcare_system.certificate_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='doctor_id']" position="after">
+                <field name="ipd_id"/>
+                <field name="purpose"/>
+                <field name="certificate_language"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="certificate_phase23_tree_inherit" model="ir.ui.view">
+        <field name="name">oeh.certificate.tree.phase23</field>
+        <field name="model">oeh.certificate</field>
+        <field name="inherit_id" ref="inom_healthcare_system.certificate_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='patient_id']" position="after">
+                <field name="ipd_id"/>
+                <field name="purpose"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ============================================================
+         IPD - Phase 2.3 Enhancements
+         Odoo 19 CE
+         ============================================================ -->
+
+    <record id="ipd_phase23_form_inherit" model="ir.ui.view">
+        <field name="name">oeh.ipd.form.ipd.management</field>
+        <field name="model">oeh.ipd</field>
+        <field name="inherit_id" ref="inom_healthcare_system.ipd_form"/>
+        <field name="arch" type="xml">
+
+
+            <xpath expr="//form/sheet/div[@name='button_box']" position="inside">
+
+                <button name="action_view_nursing_plans_phase23"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-user-md">
+
+                    <field name="nursing_plan_count"
+                           widget="statinfo"
+                           string="Nursing"/>
+                </button>
+
+                <button name="action_view_insurance_claims_phase23"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-shield">
+
+                    <field name="insurance_claim_count"
+                           widget="statinfo"
+                           string="Insurance"/>
+                </button>
+
+                <button name="action_view_certificates_phase23"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o">
+
+                    <field name="certificate_count"
+                           widget="statinfo"
+                           string="Certificates"/>
+                </button>
+
+            </xpath>
+
+
+            <!--
+                 Expected Discharge Date
+                 Add it near admission information without relying
+                 on a translated group string.
+                 -->
+
+            <xpath expr="//field[@name='admission_date']"
+                   position="after">
+
+                <field name="expected_discharge_date"/>
+
+            </xpath>
+
+
+            <!--
+                 Insurance Verification
+                  -->
+
+            <xpath expr="//field[@name='insurance_required']"
+                   position="after">
+
+                <field name="insurance_verified"
+                       invisible="not insurance_required"/>
+
+                <field name="insurance_verified_date"
+                       readonly="1"
+                       invisible="not insurance_verified"/>
+
+                <field name="insurance_remarks"
+                       invisible="not insurance_required"/>
+
+            </xpath>
+
+
+            <!--
+                 Discharge Doctor
+                  -->
+
+            <xpath expr="//field[@name='discharge_date']"
+                   position="after">
+
+                <field name="discharge_doctor_id"
+                       string="Discharging Doctor"/>
+
+                <field name="discharge_condition"
+                       string="Condition at Discharge"/>
+
+                <field name="followup_date"
+                       string="Follow-up Date"/>
+
+            </xpath>
+
+
+            <!--
+                 Discharge Instructions
+                  -->
+
+            <xpath expr="//field[@name='discharge_summary']"
+                   position="after">
+
+                <field name="discharge_instructions"
+                       widget="html"
+                       string="Discharge Instructions"/>
+
+            </xpath>
+
+
+            <!--
+                 Existing Discharge Button
+                 Do NOT remove the original button.
+                 Add the enhanced discharge button separately.
+                 -->
+
+            <xpath expr="//header" position="inside">
+
+                <button name="action_phase23_discharge"
+                        type="object"
+                        string="Complete Discharge"
+                        class="btn-primary"
+                        invisible="status != 'discharge_pending'"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!-- ============================================================
+         IPD KANBAN
+         ============================================================ -->
+
+    <record id="ipd_phase23_kanban" model="ir.ui.view">
+
+        <field name="name">oeh.ipd.kanban.ipd.management</field>
+
+        <field name="model">oeh.ipd</field>
+
+        <field name="arch" type="xml">
+
+            <kanban default_group_by="status"
+                    class="o_kanban_small_column">
+
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="ward_id"/>
+                <field name="bed_id"/>
+                <field name="attending_doctor_id"/>
+                <field name="admission_date"/>
+                <field name="expected_discharge_date"/>
+                <field name="insurance_required"/>
+                <field name="insurance_verified"/>
+                <field name="status"/>
+
+                <templates>
+
+                    <t t-name="card">
+
+                        <div class="oe_kanban_global_click">
+
+                            <!-- Patient -->
+                            <div class="fw-bold fs-5">
+                                <field name="patient_id"/>
+                            </div>
+
+                            <!-- Admission -->
+                            <div class="text-muted">
+                                <field name="name"/>
+                            </div>
+
+                            <hr class="my-2"/>
+
+                            <!-- Ward / Bed -->
+                            <div class="mb-1">
+
+                                <i class="fa fa-hospital-o me-1"
+                                   title="Ward"
+                                   aria-label="Ward"/>
+
+                                <field name="ward_id"/>
+
+                            </div>
+
+                            <div class="mb-1">
+
+                                <i class="fa fa-bed me-1"
+                                   title="Bed"
+                                   aria-label="Bed"/>
+
+                                <field name="bed_id"/>
+
+                            </div>
+
+                            <!-- Doctor -->
+                            <div class="mb-1">
+
+                                <i class="fa fa-user-md me-1"
+                                   title="Doctor"
+                                   aria-label="Doctor"/>
+
+                                <field name="attending_doctor_id"/>
+
+                            </div>
+
+                            <!-- Admission Date -->
+                            <div class="text-muted">
+
+                                <strong>Admission:</strong>
+
+                                <field name="admission_date"/>
+
+                            </div>
+
+                            <!-- Expected Discharge -->
+                            <div t-if="record.expected_discharge_date.raw_value"
+                                 class="mt-1">
+
+                                <span class="badge text-bg-info">
+
+                                    Expected Discharge:
+
+                                    <field name="expected_discharge_date"/>
+
+                                </span>
+
+                            </div>
+
+                            <!-- Insurance -->
+                            <div t-if="record.insurance_required.raw_value"
+                                 class="mt-2">
+
+                                <span t-if="record.insurance_verified.raw_value"
+                                      class="badge text-bg-success">
+
+                                    Insurance Verified
+
+                                </span>
+
+                                <span t-else=""
+                                      class="badge text-bg-warning">
+
+                                    Insurance Pending
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </t>
+
+                </templates>
+
+            </kanban>
+
+        </field>
+
+    </record>
+
+
+    <!-- ============================================================
+         IPD SEARCH
+         Odoo 19 CE
+         ============================================================ -->
+
+    <record id="ipd_phase23_search" model="ir.ui.view">
+    <field name="name">oeh.ipd.search.ipd.management</field>
+    <field name="model">oeh.ipd</field>
+    <field name="arch" type="xml">
+        <search string="IPD Admissions">
+
+            <field name="name"/>
+            <field name="patient_id"/>
+            <field name="ward_id"/>
+            <field name="bed_id"/>
+            <field name="attending_doctor_id"/>
+
+            <filter name="active_admissions"
+                    string="Active Admissions"
+                    domain="[('status','in',('admitted','under_treatment','discharge_pending'))]"/>
+
+            <filter name="insurance_required"
+                    string="Insurance Required"
+                    domain="[('insurance_required','=',True)]"/>
+
+        </search>
+    </field>
+</record>
+
+</odoo>

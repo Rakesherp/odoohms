@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="action_report_lab_result" model="ir.actions.report">
+        <field name="name">Laboratory Report</field>
+        <field name="model">oeh.lab.test.result</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">inom_healthcare_system.report_lab_result</field>
+        <field name="report_file">inom_healthcare_system.report_lab_result</field>
+        <field name="binding_model_id" ref="model_oeh_lab_test_result"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_lab_result">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <div class="text-center mb-4">
+                            <h2 style="font-weight:700;">LABORATORY REPORT</h2>
+                            <div class="text-muted">
+                                <span t-field="o.test_type_id.name"/>
+                            </div>
+                        </div>
+
+                        <table class="table table-sm table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Patient Name</strong></td>
+                                    <td><span t-field="o.patient_id.name"/></td>
+                                    <td><strong>Test ID</strong></td>
+                                    <td><span t-field="o.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Age</strong></td>
+                                    <td><span t-field="o.patient_id.age"/></td>
+                                    <td><strong>Gender</strong></td>
+                                    <td><span t-field="o.patient_id.gender"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Doctor</strong></td>
+                                    <td><span t-field="o.doctor_id.name"/></td>
+                                    <td><strong>Date of Analysis</strong></td>
+                                    <td><span t-field="o.date_analysis"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pathologist</strong></td>
+                                    <td><span t-field="o.pathologist_id.name"/></td>
+                                    <td><strong>Date Requested</strong></td>
+                                    <td><span t-field="o.date_requested"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4 class="text-center mt-4 mb-2">
+                            <span t-field="o.test_type_id.name"/>
+                        </h4>
+
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Analyte</th>
+                                    <th>Result</th>
+                                    <th>Normal Range</th>
+                                    <th>Units</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.line_ids" t-as="line">
+                                    <tr>
+                                        <td><span t-field="line.name"/></td>
+                                        <td><span t-field="line.result_text"/></td>
+                                        <td><span t-field="line.normal_range"/></td>
+                                        <td><span t-field="line.units"/></td>
+                                        <td><span t-field="line.notes"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <table class="table table-sm mt-4">
+                            <tr>
+                                <td style="width:20%;"><strong>Result</strong></td>
+                                <td><span t-field="o.result"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Diagnosis</strong></td>
+                                <td><span t-field="o.diagnosis"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Remarks</strong></td>
+                                <td><span t-field="o.remarks"/></td>
+                            </tr>
+                        </table>
+
+                        <div class="mt-5 text-end">
+                            <strong>Pathologist</strong><br/>
+                            <span t-field="o.pathologist_id.name"/>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

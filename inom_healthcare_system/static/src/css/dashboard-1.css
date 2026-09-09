@@ -1,0 +1,542 @@
+.o_inom_dashboard {
+    padding: 24px;
+    background: #f4f6fa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    box-sizing: border-box;
+    /* The Odoo web client's action container is a fixed-height flex
+       column with overflow hidden on the outer shell - this component
+       must own its own scrolling, or content below the fold is simply
+       unreachable (no scrollbar appears at all). */
+    height: 100%;
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.o_inom_dashboard *,
+.o_inom_dashboard *::before,
+.o_inom_dashboard *::after {
+    box-sizing: border-box;
+}
+
+.o_inom_loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    color: #6b7280;
+    font-size: 16px;
+}
+
+/* ---------- Header ---------- */
+.o_inom_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+.o_inom_title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+.o_inom_subtitle {
+    font-size: 13px;
+    color: #6b7280;
+}
+.o_inom_refresh {
+    border-radius: 8px;
+}
+
+/* ---------- KPI cards ---------- */
+.o_inom_kpi_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.o_inom_kpi {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+    border: 1px solid #eef0f4;
+}
+.o_inom_kpi:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(16, 24, 40, 0.12);
+}
+.o_kpi_icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #fff;
+    flex: 0 0 auto;
+}
+.o_kpi_value {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #111827;
+}
+.o_kpi_label {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+.o_kpi_badge {
+    display: inline-block;
+    margin-left: 6px;
+    background: #eef2ff;
+    color: #4338ca;
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* KPI accent colors */
+.o_kpi_blue   .o_kpi_icon { background: linear-gradient(135deg,#3b82f6,#2563eb); }
+.o_kpi_teal   .o_kpi_icon { background: linear-gradient(135deg,#14b8a6,#0d9488); }
+.o_kpi_indigo .o_kpi_icon { background: linear-gradient(135deg,#6366f1,#4f46e5); }
+.o_kpi_purple .o_kpi_icon { background: linear-gradient(135deg,#a855f7,#9333ea); }
+.o_kpi_green  .o_kpi_icon { background: linear-gradient(135deg,#22c55e,#16a34a); }
+.o_kpi_cyan   .o_kpi_icon { background: linear-gradient(135deg,#06b6d4,#0891b2); }
+.o_kpi_orange .o_kpi_icon { background: linear-gradient(135deg,#f97316,#ea580c); }
+.o_kpi_red    .o_kpi_icon { background: linear-gradient(135deg,#ef4444,#dc2626); }
+
+/* ---------- Finance strip ---------- */
+.o_inom_finance {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.o_inom_fin_card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+    border-left: 4px solid #3b82f6;
+}
+.o_inom_fin_card.o_fin_paid { border-left-color: #22c55e; }
+.o_inom_fin_card.o_fin_due  { border-left-color: #ef4444; }
+.o_fin_label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+.o_fin_value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+}
+
+/* ---------- Panels ---------- */
+.o_inom_panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+}
+.o_inom_panel {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+    border: 1px solid #eef0f4;
+    overflow: hidden;
+}
+.o_panel_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid #f0f2f5;
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 14px;
+}
+.o_panel_link {
+    font-size: 12px;
+    color: #2563eb;
+    cursor: pointer;
+    font-weight: 600;
+}
+.o_panel_link:hover { text-decoration: underline; }
+.o_panel_body { padding: 16px 18px; }
+
+/* Bars */
+.o_bar_row {
+    display: grid;
+    grid-template-columns: 110px 1fr 38px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+.o_bar_row:last-child { margin-bottom: 0; }
+.o_bar_label {
+    font-size: 12px;
+    color: #4b5563;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.o_bar_track {
+    background: #f1f3f7;
+    border-radius: 6px;
+    height: 12px;
+    overflow: hidden;
+}
+.o_bar_fill {
+    height: 100%;
+    border-radius: 6px;
+    background: #3b82f6;
+    min-width: 2px;
+    transition: width .4s ease;
+}
+.o_bar_count {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111827;
+    text-align: right;
+}
+
+/* Status-specific bar colors */
+.o_bar_draft      { background: #9ca3af; }
+.o_bar_confirm,
+.o_bar_scheduled,
+.o_bar_submitted  { background: #3b82f6; }
+.o_bar_progress,
+.o_bar_partial    { background: #f59e0b; }
+.o_bar_done,
+.o_bar_paid,
+.o_bar_approved   { background: #22c55e; }
+.o_bar_cancel,
+.o_bar_rejected   { background: #ef4444; }
+.o_bar_free       { background: #22c55e; }
+.o_bar_occupied   { background: #ef4444; }
+.o_bar_maintenance{ background: #f59e0b; }
+.o_bar_low        { background: #22c55e; }
+.o_bar_medium     { background: #f59e0b; }
+.o_bar_high       { background: #dc2626; }
+
+/* Pharmacy mini stats */
+.o_pharmacy_body {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+.o_mini_stat {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+}
+.o_mini_value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111827;
+}
+.o_mini_label {
+    font-size: 12px;
+    color: #6b7280;
+}
+.o_mini_warn { background: #fef2f2; }
+.o_mini_warn .o_mini_value { color: #dc2626; }
+
+/* ================================================================
+   New Dashboard Layout (v2) — clinic-style KPI/table/chart cards
+   ================================================================ */
+
+.o_kpi_pink   .o_kpi_icon { background: linear-gradient(135deg,#ec4899,#db2777); }
+
+.o_inom_header_actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.o_inom_date_chip {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 7px 14px;
+    font-size: 13px;
+    color: #374151;
+    font-weight: 600;
+}
+.o_inom_refresh {
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+}
+
+/* ---------- Generic card ---------- */
+.o_inom_card {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+    border: 1px solid #eef0f4;
+    overflow: hidden;
+    padding-bottom: 4px;
+    min-width: 0; /* allow grid items to shrink below content's intrinsic width */
+}
+.o_card_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid #f0f2f5;
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 14px;
+}
+
+/* ---------- Grid rows ---------- */
+/* Flexbox, not grid: with CSS Grid, every card in a row is sized to the
+   row track height, which equals the TALLEST card in that row (Quick
+   Actions, with 8 stacked buttons, is far taller than its neighbors) -
+   so shorter cards end up with a block of empty space beneath them even
+   with align-items:start. Flex items size to their own content on the
+   cross axis independently, which avoids that entirely. */
+.o_inom_row_3, .o_inom_row_4, .o_inom_row_2 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.o_inom_row_3 > .o_inom_card { flex: 1 1 320px; }
+.o_inom_row_4 > .o_inom_card { flex: 1 1 260px; }
+.o_inom_row_2 > .o_inom_card { flex: 1 1 380px; }
+@media (max-width: 640px) {
+    .o_inom_row_3 > .o_inom_card,
+    .o_inom_row_4 > .o_inom_card,
+    .o_inom_row_2 > .o_inom_card { flex-basis: 100%; }
+}
+
+/* ---------- Tables ---------- */
+.o_inom_table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    table-layout: fixed;
+}
+.o_inom_table th {
+    text-align: left;
+    color: #9ca3af;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    padding: 8px 18px;
+    border-bottom: 1px solid #f0f2f5;
+}
+.o_inom_table td {
+    padding: 10px 18px;
+    color: #374151;
+    border-bottom: 1px solid #f6f7f9;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.o_inom_table tbody tr:last-child td { border-bottom: none; }
+.o_inom_table tbody tr:hover { background: #fafbfc; }
+
+/* ---------- Status pills ---------- */
+.o_status_pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: capitalize;
+    background: #f1f3f7;
+    color: #4b5563;
+}
+.o_status_confirm, .o_status_waiting  { background: #fef3c7; color: #b45309; }
+.o_status_progress                    { background: #cffafe; color: #0e7490; }
+.o_status_done, .o_status_available   { background: #dcfce7; color: #15803d; }
+.o_status_cancel, .o_status_danger    { background: #fee2e2; color: #b91c1c; }
+.o_status_draft                       { background: #f1f3f7; color: #6b7280; }
+
+/* ---------- Donut chart ---------- */
+.o_donut_wrap {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 18px auto 8px;
+}
+.o_donut_svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.o_donut_bg { fill: none; stroke: #f1f3f7; stroke-width: 14; }
+.o_donut_svg circle { transition: stroke-dasharray .4s ease; }
+.o_donut_center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.o_donut_total { font-size: 24px; font-weight: 800; color: #111827; }
+.o_donut_total_label { font-size: 11px; color: #9ca3af; }
+.o_donut_legend {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 18px 16px;
+    font-size: 12px;
+    color: #4b5563;
+}
+.o_legend_row { display: flex; align-items: center; gap: 8px; }
+.o_legend_row b { margin-left: auto; color: #111827; }
+.o_dot {
+    width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: 0 0 auto;
+}
+.o_wait_stats {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #f0f2f5;
+    padding: 10px 12px 14px;
+    font-size: 12px;
+    color: #6b7280;
+}
+.o_wait_stats b { color: #111827; margin-left: 4px; }
+
+/* ---------- Alert / worklist rows ---------- */
+.o_list_rows { padding: 6px 8px 12px; }
+.o_alert_row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.o_alert_row:hover { background: #f8fafc; }
+.o_alert_icon { width: 20px; text-align: center; font-size: 14px; }
+.o_alert_label { flex: 1; font-size: 13px; color: #374151; }
+.o_alert_count {
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 2px 9px;
+}
+.o_alert_danger  { color: #dc2626; }
+.o_alert_warning { color: #d97706; }
+.o_alert_info    { color: #2563eb; }
+.o_alert_count.o_alert_danger  { background: #fee2e2; }
+.o_alert_count.o_alert_warning { background: #fef3c7; }
+.o_alert_count.o_alert_info    { background: #dbeafe; }
+
+/* ---------- Financial summary rows ---------- */
+.o_fin_rows { padding: 10px 18px 16px; }
+.o_fin_row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 13px;
+    color: #4b5563;
+    border-bottom: 1px dashed #f0f2f5;
+}
+.o_fin_row:last-child { border-bottom: none; }
+.o_fin_row b { color: #111827; }
+.o_fin_row.o_fin_total { font-weight: 700; }
+.o_fin_row.o_fin_total b { color: #15803d; font-size: 15px; }
+.o_fin_row.o_fin_due b { color: #dc2626; }
+
+/* ---------- Quick actions ---------- */
+.o_quick_grid {
+    display: grid;
+    /* 4 columns (2 rows for 8 buttons) instead of 2 columns (4 rows) -
+       a flex/grid row sizes to its TALLEST member, so a tall, narrow
+       Quick Actions card was forcing a big empty gap under its shorter
+       neighbors (Clinical Alerts, Worklist, Financial Summary) before
+       the next section could start. Making this card shorter fixes the
+       gap at the source instead of fighting the layout model. */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 12px 14px 16px;
+}
+.o_quick_btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 14px 6px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    color: #374151;
+    text-align: center;
+    transition: background .15s ease, transform .15s ease;
+}
+.o_quick_btn:hover { background: #eef2ff; transform: translateY(-2px); }
+.o_quick_btn i { font-size: 18px; color: #6366f1; }
+
+/* ---------- Trend chart ---------- */
+.o_trend_svg {
+    width: 100%;
+    height: 120px;
+    padding: 10px 14px 0;
+    box-sizing: border-box;
+}
+.o_trend_line {
+    fill: none;
+    stroke-width: 2.2;
+    vector-effect: non-scaling-stroke;
+}
+.o_trend_a { stroke: #6366f1; }
+.o_trend_b { stroke: #14b8a6; }
+.o_trend_axis {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 14px;
+    font-size: 10px;
+    color: #9ca3af;
+}
+.o_trend_legend {
+    display: flex;
+    gap: 16px;
+    padding: 10px 18px 16px;
+    font-size: 12px;
+    color: #4b5563;
+}
+.o_trend_legend span { display: flex; align-items: center; gap: 6px; }
+.o_trend_legend .o_dot { width: 8px; height: 8px; }
+
+/* ---------- Age distribution mini bar chart ---------- */
+.o_age_chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 140px;
+    padding: 16px 14px 6px;
+}
+.o_age_bar_wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    width: 32px;
+}
+.o_age_bar {
+    width: 18px;
+    min-height: 3px;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, #818cf8, #6366f1);
+}
+.o_age_count { font-size: 11px; font-weight: 700; color: #111827; margin: 4px 0 2px; }
+.o_age_label { font-size: 10px; color: #9ca3af; }

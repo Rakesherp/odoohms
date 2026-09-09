@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!--
+        EMR smart buttons on the patient form.
+        Added via XML inheritance (xpath) so the original patient_form
+        view is left untouched and fully backward compatible.
+    -->
+    <record id="patient_form_emr" model="ir.ui.view">
+    <field name="name">oeh.patient.form.emr</field>
+    <field name="model">oeh.patient</field>
+    <field name="inherit_id" ref="patient_form"/>
+    <field name="arch" type="xml">
+
+        <xpath expr="//div[@name='button_box']" position="inside">
+
+            <!-- "Visits" and "Appointments" buttons already exist on the
+                 base patient_form (see patient_views.xml) - do not repeat
+                 them here, or they show twice on the Patient form. -->
+
+            <button name="action_view_labs"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-flask">
+                <field name="lab_count"
+                       widget="statinfo"
+                       string="Lab Tests"/>
+            </button>
+
+            <button name="action_view_radiology"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-image">
+                <field name="radiology_count"
+                       widget="statinfo"
+                       string="Radiology"/>
+            </button>
+
+            <button name="action_view_surgeries"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-scissors">
+                <field name="surgery_count"
+                       widget="statinfo"
+                       string="Surgeries"/>
+            </button>
+
+            <button name="action_view_bills"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-money">
+                <field name="invoice_count"
+                       widget="statinfo"
+                       string="Bills"/>
+            </button>
+
+            <button name="action_view_allergies"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-exclamation-triangle">
+                <field name="allergy_count"
+                       widget="statinfo"
+                       string="Allergies"/>
+            </button>
+
+        </xpath>
+
+    </field>
+</record>
+
+</odoo>

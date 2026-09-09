@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<record id="action_report_payment" model="ir.actions.report">
+        <field name="name">Payment Receipt</field>
+        <field name="model">oeh.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">inom_healthcare_system.report_payment_doc</field>
+        <field name="report_file">inom_healthcare_system.report_payment_doc</field>
+        <field name="binding_model_id" ref="model_oeh_payment"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_claim" model="ir.actions.report">
+        <field name="name">Insurance Claim</field>
+        <field name="model">oeh.insurance.claim</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">inom_healthcare_system.report_claim_doc</field>
+        <field name="report_file">inom_healthcare_system.report_claim_doc</field>
+        <field name="binding_model_id" ref="model_oeh_insurance_claim"/>
+        <field name="binding_type">report</field>
+    </record>
+<template id="report_payment_doc">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Payment Receipt</h2>
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Receipt No:</strong> <span t-out="o.name"/><br/>
+                                <strong>Patient:</strong> <span t-out="o.patient_id.name"/><br/>
+                                <strong>Customer Invoice:</strong> <span t-out="o.invoice_id.name"/>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>Date:</strong> <span t-out="o.payment_date"/><br/>
+                                <strong>Type:</strong> <span t-out="o.payment_kind"/><br/>
+                                <strong>Status:</strong> <span t-out="o.state"/>
+                            </div>
+                        </div>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td>Payment Method</td><td class="text-end"><span t-out="o.payment_method"/></td></tr>
+                                <tr><td>Reference</td><td class="text-end"><span t-out="o.reference"/></td></tr>
+                                <tr><th>Amount Received</th><th class="text-end"><span t-out="o.amount"/></th></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_claim_doc">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Insurance Claim</h2>
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Claim No:</strong> <span t-out="o.name"/><br/>
+                                <strong>Patient:</strong> <span t-out="o.patient_id.name"/><br/>
+                                <strong>Insurance Co.:</strong> <span t-out="o.insurance_company"/><br/>
+                                <strong>Policy:</strong> <span t-out="o.policy_number"/>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>Status:</strong> <span t-out="o.claim_status"/><br/>
+                                <strong>Settlement Date:</strong> <span t-out="o.settlement_date"/>
+                            </div>
+                        </div>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td>Claimed Amount</td><td class="text-end"><span t-out="o.claim_amount"/></td></tr>
+                                <tr><td>Approved Amount</td><td class="text-end"><span t-out="o.approved_amount"/></td></tr>
+                                <tr><td>Settled Amount</td><td class="text-end"><span t-out="o.settled_amount"/></td></tr>
+                                <tr><th>Patient Responsibility</th><th class="text-end"><span t-out="o.patient_responsibility"/></th></tr>
+                            </tbody>
+                        </table>
+                        <p t-if="o.approval_notes"><strong>Approval Notes:</strong> <span t-out="o.approval_notes"/></p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <record id="action_report_medical_certificate" model="ir.actions.report">
+        <field name="name">Medical Certificate</field>
+        <field name="model">oeh.certificate</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">inom_healthcare_system.report_medical_certificate_doc</field>
+        <field name="report_file">inom_healthcare_system.report_medical_certificate_doc</field>
+        <field name="binding_model_id" ref="model_oeh_certificate"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Medical Certificate - %s' % (object.name)</field>
+    </record>
+
+    <record id="action_report_ipd_discharge_summary" model="ir.actions.report">
+        <field name="name">Discharge Summary</field>
+        <field name="model">oeh.ipd</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">inom_healthcare_system.report_ipd_discharge_summary_doc</field>
+        <field name="report_file">inom_healthcare_system.report_ipd_discharge_summary_doc</field>
+        <field name="binding_model_id" ref="model_oeh_ipd"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Discharge Summary - %s' % (object.name)</field>
+    </record>
+
+    <template id="report_medical_certificate_doc">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>MEDICAL CERTIFICATE</h2>
+                            <p><strong>Certificate No:</strong> <span t-out="o.name"/></p>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Patient:</strong> <span t-out="o.patient_id.name"/><br/>
+                                <strong>Patient ID:</strong> <span t-out="o.patient_id.patient_id"/><br/>
+                                <strong>Age / Gender:</strong> <span t-out="o.patient_id.age"/> / <span t-out="o.patient_id.gender"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Doctor:</strong> <span t-out="o.doctor_id.name"/><br/>
+                                <strong>Certificate Type:</strong> <span t-out="o.certificate_type"/><br/>
+                                <strong>Issue Date:</strong> <span t-out="o.issue_date"/>
+                            </div>
+                        </div>
+                        <table class="table table-bordered mt-4">
+                            <tbody>
+                                <tr><th>From Date</th><td><span t-out="o.from_date or o.issue_date"/></td><th>To Date</th><td><span t-out="o.to_date or o.valid_until"/></td></tr>
+                                <tr><th>No. of Days</th><td><span t-out="o.leave_days"/></td><th>Reason / Diagnosis</th><td><span t-out="o.reason"/></td></tr>
+                            </tbody>
+                        </table>
+                        <div class="mt-4">
+                            <strong>Certificate Details</strong>
+                            <div class="border p-3 mt-2" t-field="o.details"/>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <strong>Verification Reference:</strong><br/><span t-out="o.reference"/>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong t-out="o.signed_by"/><br/>
+                                <span>Issuing Doctor</span><br/>
+                                <span t-out="o.signed_date"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_ipd_discharge_summary_doc">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>DISCHARGE SUMMARY</h2>
+                            <p><strong>Admission No:</strong> <span t-out="o.name"/></p>
+                        </div>
+                        <h4 class="mt-4">Patient Information</h4>
+                        <table class="table table-sm table-bordered">
+                            <tbody>
+                                <tr><th>Patient</th><td><span t-out="o.patient_id.name"/></td><th>Patient ID</th><td><span t-out="o.patient_id.patient_id"/></td></tr>
+                                <tr><th>Age / Gender</th><td><span t-out="o.patient_id.age"/> / <span t-out="o.patient_id.gender"/></td><th>Blood Group</th><td><span t-out="o.patient_id.blood_group"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4 class="mt-4">Admission Details</h4>
+                        <table class="table table-sm table-bordered">
+                            <tbody>
+                                <tr><th>Admission Date</th><td><span t-out="o.admission_date"/></td><th>Discharge Date</th><td><span t-out="o.discharge_date"/></td></tr>
+                                <tr><th>Ward</th><td><span t-out="o.ward_id.name"/></td><th>Bed</th><td><span t-out="o.bed_id.name"/></td></tr>
+                                <tr><th>Admission Type</th><td><span t-out="o.admission_type"/></td><th>Length of Stay</th><td><span t-out="o.stay_days"/> days</td></tr>
+                                <tr><th>Attending Doctor</th><td><span t-out="o.attending_doctor_id.name"/></td><th>Nurse In-Charge</th><td><span t-out="o.nurse_in_charge_id.name"/></td></tr>
+                            </tbody>
+                        </table>
+                        <h4 class="mt-4">Clinical Summary</h4>
+                        <p><strong>Reason for Admission:</strong> <span t-out="o.reason"/></p>
+                        <p><strong>Diagnosis:</strong> <span t-out="o.diagnosis"/></p>
+                        <h4 class="mt-4">Discharge Information</h4>
+                        <p><strong>Discharge Reason:</strong> <span t-out="o.discharge_reason"/></p>
+                        <div class="border p-3" t-field="o.discharge_summary"/>
+                        <h4 class="mt-4">Insurance &amp; Billing</h4>
+                        <table class="table table-sm table-bordered">
+                            <tbody>
+                                <tr><th>Insurance Required</th><td><span t-out="'Yes' if o.insurance_required else 'No'"/></td><th>Insurance Company</th><td><span t-out="o.insurance_partner_id.name"/></td></tr>
+                                <tr><th>Policy Number</th><td><span t-out="o.policy_number"/></td><th>Claim</th><td><span t-out="o.insurance_claim_id.name"/></td></tr>
+                            </tbody>
+                        </table>
+                        <div class="row mt-5">
+                            <div class="col-6"><strong>Doctor Signature</strong><br/><br/>____________________________</div>
+                            <div class="col-6 text-end"><strong>Hospital Seal / Authorized Signatory</strong><br/><br/>____________________________</div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ============================================================
+         LAB TEST TYPE / CONFIGURATION
+         ============================================================ -->
+
+    <record id="lab_test_type_list" model="ir.ui.view">
+        <field name="name">oeh.lab.test.type.list</field>
+        <field name="model">oeh.lab.test.type</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="fee"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="lab_test_type_form" model="ir.ui.view">
+        <field name="name">oeh.lab.test.type.form</field>
+        <field name="model">oeh.lab.test.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="product_id"/>
+                            <field name="fee" readonly="1"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Test Cases">
+                            <field name="case_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="normal_range"/>
+                                    <field name="units"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="lab_test_type_action" model="ir.actions.act_window">
+        <field name="name">Lab Test Types</field>
+        <field name="res_model">oeh.lab.test.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ============================================================
+         LAB REQUESTS
+         ============================================================ -->
+
+    <record id="laboratory_tree" model="ir.ui.view">
+        <field name="name">oeh.laboratory.list</field>
+        <field name="model">oeh.laboratory</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="test_type_id"/>
+                <field name="request_date"/>
+                <field name="test_date"/>
+                <field name="state"/>
+                <field name="invoice_id"/>
+            </list>
+        </field>
+    </record>
+<!-- 
+   <record id="laboratory_search" model="ir.ui.view">
+    <field name="name">oeh.laboratory.search</field>
+    <field name="model">oeh.laboratory</field>
+    <field name="arch" type="xml">
+        <search>
+            <field name="name"/>
+            <field name="patient_id"/>
+            <field name="doctor_id"/>
+            <field name="test_type_id"/>
+
+            <separator/>
+
+            <filter name="draft"
+                    string="Draft Lab Requests"
+                    domain="[('state', '=', 'draft')]"/>
+
+            <filter name="tested"
+                    string="Tested"
+                    domain="[('state', '=', 'tested')]"/>
+
+            <filter name="cancel"
+                    string="Cancelled"
+                    domain="[('state', '=', 'cancel')]"/>
+
+            <filter name="today"
+                    string="Today's Requests"
+                    domain="[('request_date', '>=', context_today()),
+                             ('request_date', '&lt;', context_today() + relativedelta(days=1))]"/>
+
+            Odoo 19: group accepts NO expand/string attributes
+            <group>
+                <filter name="group_test"
+                        string="Test Type"
+                        context="{'group_by': 'test_type_id'}"/>
+
+                <filter name="group_doctor"
+                        string="Doctor"
+                        context="{'group_by': 'doctor_id'}"/>
+
+                <filter name="group_state"
+                        string="Status"
+                        context="{'group_by': 'state'}"/>
+            </group>
+        </search>
+    </field>
+</record> -->
+
+    <record id="laboratory_form" model="ir.ui.view">
+        <field name="name">oeh.laboratory.form</field>
+        <field name="model">oeh.laboratory</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_create_lab_test"
+                            string="Create Lab Test"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft' or result_id"/>
+
+                    <button name="action_open_lab_test"
+                            string="Open Lab Test"
+                            type="object"
+                            invisible="not result_id"/>
+
+                    <button name="action_create_lab_invoice"
+                            string="Create Lab Invoice"
+                            type="object"
+                            invisible="invoice_id"/>
+
+                    <button name="action_cancel"
+                            string="Cancel Lab Request"
+                            type="object"
+                            invisible="state == 'cancel'"/>
+
+                    <button name="action_reset_to_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            invisible="state != 'cancel'"/>
+
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,tested,cancel"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+
+                        <button name="action_open_lab_test"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-flask"
+                                invisible="not result_id">
+                            <field name="result_id"
+                                   widget="statinfo"
+                                   string="Lab Test"/>
+                        </button>
+
+                        <button name="action_create_lab_invoice"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-file-text-o"
+                                invisible="not invoice_id">
+                            <field name="invoice_id"
+                                   widget="statinfo"
+                                   string="Invoice"/>
+                        </button>
+
+                    </div>
+
+                    <h1>
+                        <field name="name" readonly="1"/>
+                    </h1>
+
+                    <group string="Main Info">
+                        <group>
+                            <field name="test_type_id"/>
+                            <field name="request_date"/>
+                            <field name="test_date"/>
+                            <field name="invoice_to_insurance"/>
+                        </group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="doctor_id"/>
+                            <field name="invoice_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Notes">
+                        <field name="notes"
+                               nolabel="1"
+                               placeholder="Clinical notes / instructions..."/>
+                    </group>
+
+                    <group string="Result">
+                        <field name="result_id" readonly="1"/>
+                        <field name="result" readonly="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="laboratory_action" model="ir.actions.act_window">
+        <field name="name">Lab Requests</field>
+        <field name="res_model">oeh.laboratory</field>
+        <field name="view_mode">list,form</field>
+        <!-- <field name="search_view_id" ref="laboratory_search"/> -->
+    </record>
+
+    <record id="laboratory_action_draft" model="ir.actions.act_window">
+        <field name="name">Draft Lab Requests</field>
+        <field name="res_model">oeh.laboratory</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','=','draft')]</field>
+       <!--  <field name="search_view_id" ref="laboratory_search"/> -->
+    </record>
+
+    <record id="laboratory_action_today_draft" model="ir.actions.act_window">
+        <field name="name">Today's Draft Lab Requests</field>
+        <field name="res_model">oeh.laboratory</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','=','draft'), ('request_date','&gt;=', context_today()), ('request_date','&lt;', context_today() + relativedelta(days=1))]</field>
+        <!-- <field name="search_view_id" ref="laboratory_search"/> -->
+    </record>
+
+
+    <!-- ============================================================
+         LAB TEST RESULTS
+         ============================================================ -->
+
+    <record id="lab_result_list" model="ir.ui.view">
+        <field name="name">oeh.lab.test.result.list</field>
+        <field name="model">oeh.lab.test.result</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="result == 'critical'"
+                  decoration-warning="result == 'abnormal'">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="test_type_id"/>
+                <field name="doctor_id"/>
+                <field name="date_analysis"/>
+                <field name="result"/>
+                <field name="state"/>
+                <field name="invoice_id"/>
+            </list>
+        </field>
+    </record>
+
+   <!--  <record id="lab_result_search" model="ir.ui.view">
+        <field name="name">oeh.lab.test.result.search</field>
+        <field name="model">oeh.lab.test.result</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="test_type_id"/>
+
+                <separator/>
+
+                <filter name="draft"
+                        string="Draft"
+                        domain="[('state','=','draft')]"/>
+                <filter name="tested"
+                        string="Tested"
+                        domain="[('state','=','done')]"/>
+                <filter name="abnormal"
+                        string="Abnormal"
+                        domain="[('result','=','abnormal')]"/>
+                <filter name="critical"
+                        string="Critical"
+                        domain="[('result','=','critical')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter name="group_test"
+                            string="Test Type"
+                            context="{'group_by':'test_type_id'}"/>
+                    <filter name="group_result"
+                            string="Result"
+                            context="{'group_by':'result'}"/>
+                </group>
+            </search>
+        </field>
+    </record> -->
+
+    <record id="lab_result_form" model="ir.ui.view">
+        <field name="name">oeh.lab.test.result.form</field>
+        <field name="model">oeh.lab.test.result</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_mark_tested"
+                            string="Tested"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_create_lab_invoice"
+                            string="Create Lab Invoice"
+                            type="object"
+                            invisible="state != 'done' or invoice_id"/>
+
+                    <button name="%(action_report_lab_result)d"
+                            string="Print Report"
+                            type="action"
+                            invisible="state != 'done'"/>
+
+                    <button name="action_cancel"
+                            string="Cancel"
+                            type="object"
+                            invisible="state == 'cancel'"/>
+
+                    <button name="action_reset_to_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            invisible="state != 'cancel'"/>
+
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,done,cancel"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+
+                        <button name="action_create_lab_invoice"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-file-text-o"
+                                invisible="not invoice_id">
+                            <field name="invoice_id"
+                                   widget="statinfo"
+                                   string="Invoice"/>
+                        </button>
+
+                    </div>
+
+                    <h1>
+                        <field name="name" readonly="1"/>
+                    </h1>
+
+                    <group string="Main Info">
+                        <group>
+                            <field name="date_analysis"/>
+                            <field name="pathologist_id"/>
+                            <field name="doctor_id"/>
+                        </group>
+                        <group>
+                            <field name="test_type_id"/>
+                            <field name="patient_id"/>
+                            <field name="date_requested" readonly="1"/>
+                            <field name="request_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Test Cases">
+                        <field name="line_ids">
+                            <list editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name" readonly="1"/>
+                                <field name="result_text"/>
+                                <field name="normal_range" readonly="1"/>
+                                <field name="units" readonly="1"/>
+                                <field name="notes"/>
+                            </list>
+                        </field>
+                    </group>
+
+                    <group string="Extra Info">
+                        <field name="result"/>
+                        <field name="diagnosis"
+                               placeholder="Clinical interpretation / diagnosis..."/>
+                        <field name="remarks"
+                               placeholder="Additional laboratory remarks..."/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="lab_result_action" model="ir.actions.act_window">
+        <field name="name">Lab Tests Results</field>
+        <field name="res_model">oeh.lab.test.result</field>
+        <field name="view_mode">list,form</field>
+       <!--  <field name="search_view_id" ref="lab_result_search"/> -->
+    </record>
+
+</odoo>

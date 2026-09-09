@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="ward_phase23_form_inherit" model="ir.ui.view">
+        <field name="name">oeh.ward.form.phase23</field>
+        <field name="model">oeh.ward</field>
+        <field name="inherit_id" ref="inom_healthcare_system.ward_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='nurse_in_charge']" position="after">
+                <field name="nurse_in_charge_id"/>
+            </xpath>
+            <xpath expr="//field[@name='nurse_in_charge']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

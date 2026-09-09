@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_report_phase23_discharge_summary" model="ir.actions.report">
+        <field name="name">IPD Discharge Summary - Detailed</field>
+        <field name="model">oeh.ipd</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">inom_hms_ipd_management.report_phase23_discharge_summary</field>
+        <field name="report_file">inom_hms_ipd_management.report_phase23_discharge_summary</field>
+        <field name="binding_model_id" ref="inom_healthcare_system.model_oeh_ipd"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'IPD Discharge Summary - %s' % (object.name)</field>
+    </record>
+
+    <template id="report_phase23_discharge_summary">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">IPD DISCHARGE SUMMARY</h2>
+                        <p class="text-center">
+                            <strong>Admission:</strong> <span t-out="o.name"/>
+                        </p>
+
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                                <th>Patient</th><td><span t-out="o.patient_id.name"/></td>
+                                <th>Patient ID</th><td><span t-out="o.patient_id.patient_id"/></td>
+                            </tr>
+                            <tr>
+                                <th>Admission Date</th><td><span t-out="o.admission_date"/></td>
+                                <th>Discharge Date</th><td><span t-out="o.discharge_date"/></td>
+                            </tr>
+                            <tr>
+                                <th>Ward</th><td><span t-out="o.ward_id.name"/></td>
+                                <th>Bed</th><td><span t-out="o.bed_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <th>Attending Doctor</th><td><span t-out="o.attending_doctor_id.name"/></td>
+                                <th>Discharging Doctor</th><td><span t-out="o.discharge_doctor_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <th>Condition</th><td><span t-out="o.discharge_condition"/></td>
+                                <th>Length of Stay</th><td><span t-out="o.stay_days"/> days</td>
+                            </tr>
+                        </table>
+
+                        <h4>Reason for Admission</h4>
+                        <p t-out="o.reason"/>
+
+                        <h4>Diagnosis / Clinical Notes</h4>
+                        <p t-out="o.diagnosis"/>
+
+                        <h4>Discharge Summary</h4>
+                        <div t-field="o.discharge_summary"/>
+
+                        <h4>Discharge Instructions</h4>
+                        <div t-field="o.discharge_instructions"/>
+
+                        <h4>Follow-up</h4>
+                        <p>
+                            Follow-up Date:
+                            <strong t-out="o.followup_date"/>
+                        </p>
+
+                        <div class="mt-5 row">
+                            <div class="col-6">
+                                <strong>Discharging Doctor</strong><br/>
+                                <span t-out="o.discharge_doctor_id.name"/>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>Hospital</strong><br/>
+                                <span t-out="o.company_id.name"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,571 @@
+:root {
+    --pfd-navy: #172554;
+    --pfd-blue: #2563eb;
+    --pfd-green: #16a34a;
+    --pfd-red: #ef3340;
+    --pfd-orange: #f59e0b;
+    --pfd-purple: #7c3aed;
+    --pfd-border: #dfe6f0;
+    --pfd-muted: #64748b;
+}
+
+.o_pharmacy_flash_dashboard {
+    min-height: 100%;
+    padding: 18px;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(59, 130, 246, .07), transparent 25%),
+        radial-gradient(circle at 90% 15%, rgba(124, 58, 237, .06), transparent 25%),
+        #f7faff;
+    color: #172033;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+.o_pfd_shell {
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* Header */
+.o_pfd_header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    min-height: 94px;
+    padding: 12px 22px;
+    border: 1px solid #d9e2ef;
+    border-radius: 18px;
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 8px 30px rgba(30, 64, 175, .07);
+}
+
+.o_pfd_brand,
+.o_pfd_datetime,
+.o_pfd_market,
+.o_pfd_card_heading {
+    display: flex;
+    align-items: center;
+}
+
+.o_pfd_brand { gap: 13px; }
+.o_pfd_brand_icon {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    color: #fff;
+    background: linear-gradient(135deg, #2563eb, #0ea5e9);
+    box-shadow: 0 8px 20px rgba(37,99,235,.22);
+    font-size: 22px;
+}
+.o_pfd_title {
+    color: #172554;
+    font-size: 24px;
+    font-weight: 850;
+    letter-spacing: -.5px;
+}
+.o_pfd_subtitle {
+    margin-top: 2px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .35px;
+}
+
+.o_pfd_datetime {
+    min-width: 230px;
+    justify-content: center;
+    flex-direction: column;
+    padding: 9px 20px;
+    border: 1px solid #d7e0ec;
+    border-radius: 14px;
+    background: #fbfdff;
+}
+.o_pfd_clock {
+    color: #1d4ed8;
+    font-size: 22px;
+    font-weight: 800;
+}
+.o_pfd_clock i { margin-right: 7px; color: #64748b; }
+.o_pfd_date {
+    margin-top: 2px;
+    color: #475569;
+    font-size: 11px;
+}
+
+.o_pfd_market {
+    justify-content: flex-end;
+    gap: 11px;
+}
+.o_pfd_market_icon {
+    color: #2563eb;
+    font-size: 43px;
+    transform: rotate(-20deg);
+}
+.o_pfd_market_title {
+    color: #2563eb;
+    font-size: 22px;
+    font-weight: 850;
+    line-height: 1;
+}
+.o_pfd_market_subtitle {
+    margin-top: 4px;
+    color: #16a34a;
+    font-size: 21px;
+    font-weight: 850;
+    line-height: 1;
+}
+
+/* KPI */
+.o_pfd_kpi_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 16px 0 18px;
+}
+.o_pfd_kpi {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 112px;
+    padding: 18px 22px;
+    border: 1px solid var(--pfd-border);
+    border-radius: 16px;
+    background: rgba(255,255,255,.98);
+    box-shadow: 0 7px 24px rgba(30, 41, 59, .06);
+}
+.o_pfd_kpi_icon {
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-size: 25px;
+}
+.o_pfd_kpi_green .o_pfd_kpi_icon { color: #16a34a; background: #ecfdf3; border: 1px solid #b7efc9; }
+.o_pfd_kpi_red .o_pfd_kpi_icon { color: #ef4444; background: #fff1f2; border: 1px solid #fecdd3; }
+.o_pfd_kpi_purple .o_pfd_kpi_icon { color: #7c3aed; background: #f5f3ff; border: 1px solid #ddd6fe; }
+.o_pfd_kpi_label {
+    color: #475569;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .5px;
+}
+.o_pfd_kpi_value {
+    margin-top: 2px;
+    font-size: 32px;
+    line-height: 1.05;
+    font-weight: 900;
+}
+.o_pfd_kpi_green .o_pfd_kpi_value { color: #16a34a; }
+.o_pfd_kpi_red .o_pfd_kpi_value { color: #ef4444; }
+.o_pfd_kpi_purple .o_pfd_kpi_value { color: #7c3aed; }
+.o_pfd_kpi_hint {
+    margin-top: 4px;
+    color: #64748b;
+    font-size: 11px;
+}
+
+/* Alert panels */
+.o_pfd_alert_grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+.o_pfd_alert_card {
+    position: relative;
+    overflow: hidden;
+    min-height: 555px;
+    padding: 20px 21px 12px;
+    border: 1px solid #dce4ef;
+    border-radius: 18px;
+    background: rgba(255,255,255,.98);
+    box-shadow: 0 10px 32px rgba(30, 41, 59, .07);
+}
+.o_pfd_stock_card { border-top: 3px solid #ef4444; }
+.o_pfd_expiry_card { border-top: 3px solid #7c3aed; }
+
+.o_pfd_card_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e7edf5;
+}
+.o_pfd_card_heading { gap: 11px; }
+.o_pfd_card_icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-size: 17px;
+}
+.o_pfd_red_icon { color: #ef3340; background: #fff1f2; border: 1px solid #fecdd3; }
+.o_pfd_purple_icon { color: #7c3aed; background: #f5f3ff; border: 1px solid #ddd6fe; }
+.o_pfd_card_title {
+    color: #b91c1c;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: .15px;
+}
+.o_pfd_expiry_card .o_pfd_card_title { color: #6d28d9; }
+.o_pfd_card_caption {
+    margin-top: 3px;
+    color: #94a3b8;
+    font-size: 10px;
+}
+.o_pfd_view_all {
+    border: 0;
+    background: transparent;
+    color: #2563eb;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+}
+.o_pfd_view_all:hover { color: #1d4ed8; }
+
+/* Scrolling list */
+.o_pfd_vertical_marquee {
+    position: relative;
+    height: 405px;
+    margin-top: 8px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,250,252,.82));
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 5%, #000 95%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 5%, #000 95%, transparent 100%);
+}
+
+.o_pfd_vertical_track {
+    display: block;
+    animation: pfdVerticalMarquee 18s linear infinite;
+    will-change: transform;
+}
+.o_pfd_vertical_track.is-paused { animation-play-state: paused; }
+
+.o_pfd_marquee_group {
+    display: block;
+}
+
+.o_pfd_vertical_marquee:hover .o_pfd_vertical_track,
+.o_pfd_alert_card:hover .o_pfd_vertical_track {
+    animation-play-state: paused;
+}
+
+@keyframes pfdVerticalMarquee {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-50%);
+    }
+}
+
+.o_pfd_stock_row,
+.o_pfd_expiry_row {
+    display: grid;
+    align-items: center;
+    gap: 10px;
+    min-height: 56px;
+    padding: 7px 5px;
+    border-bottom: 1px dashed #e2e8f0;
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease;
+}
+.o_pfd_stock_row {
+    grid-template-columns: 28px minmax(0,1fr) 92px 80px 16px;
+}
+.o_pfd_expiry_row {
+    grid-template-columns: 74px minmax(0,1fr) 105px 16px;
+}
+.o_pfd_stock_row:hover,
+.o_pfd_expiry_row:hover {
+    background: #f8fafc;
+    transform: translateX(2px);
+}
+
+.o_pfd_row_icon {
+    color: #ef3340;
+    text-align: center;
+    font-size: 14px;
+}
+.o_pfd_row_name { min-width: 0; }
+.o_pfd_row_name strong {
+    display: block;
+    overflow: hidden;
+    color: #1e293b;
+    font-size: 13px;
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.o_pfd_row_name span {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    color: #94a3b8;
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.o_pfd_status {
+    justify-self: start;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 850;
+}
+.o_pfd_status_critical { color: #dc2626; background: #fff1f2; }
+.o_pfd_status_warning { color: #ea580c; background: #fff7ed; }
+
+.o_pfd_qty { text-align: right; }
+.o_pfd_qty strong {
+    display: block;
+    color: #334155;
+    font-size: 13px;
+}
+.o_pfd_qty span {
+    display: block;
+    margin-top: 1px;
+    color: #94a3b8;
+    font-size: 8px;
+}
+.o_pfd_row_arrow {
+    color: #cbd5e1;
+    font-size: 10px;
+}
+.o_pfd_date_badge {
+    width: 62px;
+    padding: 6px 4px;
+    border-radius: 8px;
+    text-align: center;
+}
+.o_pfd_date_badge strong {
+    display: block;
+    font-size: 12px;
+    line-height: 1;
+}
+.o_pfd_date_badge span {
+    display: block;
+    margin-top: 3px;
+    font-size: 8px;
+    font-weight: 800;
+}
+.o_pfd_date_notice { color: #5b21b6; background: #f5f3ff; }
+.o_pfd_date_warning { color: #c2410c; background: #fff7ed; }
+.o_pfd_date_critical,
+.o_pfd_date_expired { color: #b91c1c; background: #fff1f2; }
+
+.o_pfd_expiry_days {
+    color: #6d28d9;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 800;
+}
+.o_pfd_expiry_days strong { font-weight: 800; }
+
+.o_pfd_scroll_hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding-top: 8px;
+    color: #ef4444;
+    font-size: 9px;
+    font-weight: 700;
+}
+.o_pfd_scroll_hint_purple { color: #7c3aed; }
+
+.o_pfd_empty {
+    min-height: 400px;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    text-align: center;
+    color: #94a3b8;
+}
+.o_pfd_empty_icon { margin-bottom: 10px; color: #16a34a; font-size: 32px; }
+.o_pfd_empty strong { color: #334155; font-size: 16px; }
+.o_pfd_empty span { margin-top: 4px; font-size: 11px; }
+
+/* Flash news */
+.o_pfd_flash_news {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    height: 50px;
+    margin-top: 16px;
+    border: 1px solid #cbdcf4;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 7px 24px rgba(37, 99, 235, .06);
+}
+.o_pfd_flash_label {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    padding: 0 18px;
+    color: #fff;
+    background: linear-gradient(90deg, #ef3340, #f43f5e);
+    font-size: 13px;
+    font-weight: 900;
+}
+.o_pfd_flash_track {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.o_pfd_flash_content {
+    display: inline-flex;
+    align-items: center;
+    gap: 34px;
+    padding-left: 22px;
+    animation: pfdNewsScroll 24s linear infinite;
+}
+.o_pfd_flash_content span {
+    color: #334155;
+    font-size: 11px;
+}
+.o_pfd_flash_content i {
+    margin-right: 6px;
+    color: #16a34a;
+}
+
+.o_pfd_footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px 4px;
+    color: #94a3b8;
+    font-size: 9px;
+}
+
+.o_pfd_loading,
+.o_pfd_error {
+    min-height: 70vh;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 8px;
+    color: #64748b;
+}
+.o_pfd_spinner {
+    width: 62px;
+    height: 62px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 24px;
+    animation: pfdFloat 1.8s ease-in-out infinite;
+}
+.o_pfd_loading strong,
+.o_pfd_error strong { color: #1e293b; font-size: 16px; }
+.o_pfd_loading span,
+.o_pfd_error span { font-size: 11px; }
+.o_pfd_error_icon { color: #ef4444; font-size: 42px; }
+.o_pfd_error_button {
+    margin-top: 8px;
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 9px;
+    color: #fff;
+    background: #2563eb;
+    cursor: pointer;
+}
+
+@keyframes pfdNewsScroll {
+    from { transform: translateX(100%); }
+    to { transform: translateX(-100%); }
+}
+@keyframes pfdFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+@media (max-width: 1050px) {
+    .o_pfd_header { grid-template-columns: 1fr auto; }
+    .o_pfd_market { display: none; }
+    .o_pfd_alert_grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+    .o_pharmacy_flash_dashboard { padding: 10px; }
+    .o_pfd_header { grid-template-columns: 1fr; }
+    .o_pfd_datetime { justify-self: start; }
+    .o_pfd_kpi_grid { grid-template-columns: 1fr; }
+    .o_pfd_stock_row { grid-template-columns: 25px minmax(0,1fr) 70px 60px; }
+    .o_pfd_stock_row .o_pfd_row_arrow { display: none; }
+    .o_pfd_expiry_row { grid-template-columns: 62px minmax(0,1fr) 85px; }
+    .o_pfd_expiry_row .o_pfd_row_arrow { display: none; }
+    .o_pfd_footer { flex-direction: column; }
+}
+
+/* Mobile / tablet page scrolling. Odoo's action manager may constrain the
+   backend action viewport, so the dashboard owns its vertical scroll. */
+.o_pharmacy_flash_dashboard {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+}
+.o_pharmacy_flash_dashboard::-webkit-scrollbar {
+    width: 7px;
+}
+.o_pharmacy_flash_dashboard::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+.o_pharmacy_flash_dashboard::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+@media (max-width: 720px) {
+    .o_pharmacy_flash_dashboard {
+        height: calc(100dvh - 46px);
+        min-height: 0;
+        padding: 10px;
+        overflow-y: auto;
+    }
+    .o_pfd_shell {
+        width: 100%;
+        max-width: none;
+    }
+    .o_pfd_header {
+        min-height: auto;
+    }
+    .o_pfd_kpi {
+        min-height: 92px;
+        padding: 14px 16px;
+    }
+    .o_pfd_alert_card {
+        min-height: 460px;
+        padding: 16px;
+    }
+    .o_pfd_vertical_marquee {
+        height: 310px;
+    }
+    .o_pfd_flash_news {
+        position: relative;
+        min-width: 0;
+    }
+    .o_pfd_flash_track {
+        min-width: 0;
+    }
+    .o_pfd_flash_content {
+        white-space: nowrap;
+    }
+    .o_pfd_footer {
+        padding-bottom: 18px;
+    }
+}

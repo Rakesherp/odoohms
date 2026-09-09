@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="lot_template">
+		<t t-call="web.html_container">
+			<t t-call="web.external_layout">
+				<div class="page">						
+					<div class="oe_structure"/>
+					<div class="text-center">
+						<h2><strong><span><i>Lot and Serial Expiry Report</i></span></strong></h2>
+					</div>
+					<table class="table table-bordered mt32">
+						<thead>
+							<tr>
+								<th name="th_lot/Serial" class="text-center">
+									<span><strong>Lot/Serial Number</strong></span>
+								</th>
+								<th name="th_product" class="text-center">
+									<span><strong>Product Name</strong></span>
+								</th>
+								<th name="th_product_expiry_date" class="text-center">
+									<span><strong>Expiry Date</strong></span>
+								</th>
+								<th name="th_expire_within" class="text-center">
+									<span><strong>Expire Within (Days)</strong></span>
+								</th>
+								<th name="th_qty" class="text-center">
+									<span><strong>Quantity</strong></span>
+								</th>
+							</tr>
+						</thead>
+						<t t-foreach="product_list" t-as="line">
+							<tr>
+								<td class="text-center">
+									<span t-esc="line['lot_serial_number']"/>
+								</td>
+								<td>
+									<span t-esc="line['product_name']"/>
+								</td>
+								<td class="text-center">
+									<span t-esc="line['product_expiry_date']"/>
+								</td>
+								<td class="text-center">
+									<span t-esc="line['product_expire_within']"/>
+								</td>
+								<td class="text-center">
+									<span t-esc="line['product_qty']"/>
+								</td>
+							</tr>
+						</t>
+					</table>
+				</div>
+			</t>
+		</t>
+	</template>
+</odoo>

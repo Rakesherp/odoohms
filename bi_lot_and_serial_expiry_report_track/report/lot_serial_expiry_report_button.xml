@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="action_lot_and_serial_expiry_report" model="ir.actions.report">
+		<field name="name">Lot and Serial Expiry Report</field>
+		<field name="model">lot.serial.expiry.report.wizard</field>
+		<field name="report_type">qweb-pdf</field>
+		<field name="report_name">bi_lot_and_serial_expiry_report_track.lot_template</field>
+		<field name="report_file">bi_lot_and_serial_expiry_report_track.lot_template</field>
+		<field name="print_report_name">'Lot and Serial Expiry Report - %s'</field>
+		<field name="binding_type">report</field>
+	</record>
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_appointment_booking" model="ir.actions.client">
+        <field name="name">Book Appointment</field>
+        <field name="tag">inom_healthcare_system.appointment_booking</field>
+    </record>
+
+    <record id="action_queue_board" model="ir.actions.client">
+        <field name="name">Queue / Token Board</field>
+        <field name="tag">inom_healthcare_system.queue_board</field>
+    </record>
+</odoo>

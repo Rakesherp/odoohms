@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="nursing_phase23_tree_inherit" model="ir.ui.view">
+        <field name="name">oeh.nursing.tree.phase23</field>
+        <field name="model">oeh.nursing</field>
+        <field name="inherit_id" ref="inom_healthcare_system.nursing_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='nurse']" position="replace">
+                <field name="nurse_in_charge_id"/>
+            </xpath>
+            <xpath expr="//field[@name='patient_id']" position="after">
+                <field name="ipd_id"/>
+                <field name="fall_risk" widget="badge"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="nursing_phase23_form_inherit" model="ir.ui.view">
+        <field name="name">oeh.nursing.form.phase23</field>
+        <field name="model">oeh.nursing</field>
+        <field name="inherit_id" ref="inom_healthcare_system.nursing_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='patient_id']" position="after">
+                <field name="ipd_id"/>
+                <field name="nurse_in_charge_id"/>
+            </xpath>
+            <xpath expr="//field[@name='nurse']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Shift Handover">
+                    <group>
+                        <field name="pain_score"/>
+                        <field name="fall_risk"/>
+                        <field name="isolation_precaution"/>
+                    </group>
+                    <field name="handover_notes"/>
+                    <field name="fluid_balance_notes"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="nursing_phase23_search" model="ir.ui.view">
+        <field name="name">oeh.nursing.search.phase23</field>
+        <field name="model">oeh.nursing</field>
+        <field name="arch" type="xml">
+            <search string="Nursing Plans">
+                <field name="patient_id"/>
+                <field name="ipd_id"/>
+                <field name="nurse_in_charge_id"/>
+                <field name="shift"/>
+                <filter name="in_progress" string="In Progress"
+                        domain="[('state','=','in_progress')]"/>
+                <filter name="today" string="Today"
+                        domain="[('plan_date','=',context_today())]"/>
+            </search>
+        </field>
+    </record>
+</odoo>

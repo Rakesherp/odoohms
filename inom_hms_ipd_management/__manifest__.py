@@ -1,0 +1,22 @@
+{
+    'name': 'INOM HMS - Phase 2.3 IPD & Bed Management',
+    'version': '19.0.1.0.0',
+    'category': 'Healthcare',
+    'summary': 'IPD, bed management, nursing assignment, insurance workflow and discharge documents',
+    'author': 'Bytewerk',
+    'license': 'LGPL-3',
+    'depends': ['inom_healthcare_system'],
+    'data': [
+        'security/ir.model.access.csv',
+        'report/discharge_report.xml',
+        'views/ipd_views.xml',
+        'views/bed_views.xml',
+        'views/ward_views.xml',
+        'views/nursing_views.xml',
+        'views/insurance_views.xml',
+        'views/certificate_views.xml',
+        'views/actions.xml',
+    ],
+    'installable': True,
+    'application': False,
+}
