@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_phase23_ipd_manager,Phase23 IPD Manager,inom_healthcare_system.model_oeh_ipd,inom_healthcare_system.group_hospital_manager,1,1,1,1
+access_phase23_ipd_nurse,Phase23 IPD Nurse,inom_healthcare_system.model_oeh_ipd,inom_healthcare_system.group_hospital_nurse,1,1,1,0
+access_phase23_ipd_doctor,Phase23 IPD Doctor,inom_healthcare_system.model_oeh_ipd,inom_healthcare_system.group_hospital_doctor,1,1,1,0
+access_phase23_nursing_manager,Phase23 Nursing Manager,inom_healthcare_system.model_oeh_nursing,inom_healthcare_system.group_hospital_manager,1,1,1,1
+access_phase23_nursing_nurse,Phase23 Nursing Nurse,inom_healthcare_system.model_oeh_nursing,inom_healthcare_system.group_hospital_nurse,1,1,1,1
+access_phase23_insurance_manager,Phase23 Insurance Manager,inom_healthcare_system.model_oeh_insurance_claim,inom_healthcare_system.group_hospital_manager,1,1,1,1
+access_phase23_certificate_manager,Phase23 Certificate Manager,inom_healthcare_system.model_oeh_certificate,inom_healthcare_system.group_hospital_manager,1,1,1,1

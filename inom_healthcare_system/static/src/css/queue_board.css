@@ -1,0 +1,485 @@
+
+/* ============================================================
+   INOM Healthcare - Queue / Token Board
+   Odoo 19 CE / OWL
+   ============================================================ */
+
+.o_inom_queue_board {
+    --qb-border: #dfe5ec;
+    --qb-text: #172033;
+    --qb-muted: #667085;
+    --qb-heading: #101828;
+    --qb-primary: #714b67;
+
+    box-sizing: border-box;
+    width: 100%;
+    min-height: calc(100vh - 24px);
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px 24px 32px;
+    background: #f5f7fa;
+    color: var(--qb-text);
+    font-size: 15px;
+    line-height: 1.45;
+    scrollbar-width: auto;
+}
+
+/* Make all child sizing predictable */
+.o_inom_queue_board *,
+.o_inom_queue_board *::before,
+.o_inom_queue_board *::after {
+    box-sizing: border-box;
+}
+
+/* Header */
+.o_inom_queue_board .o_qb_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px 28px;
+    margin-bottom: 18px;
+    background: #fff;
+    border: 1px solid var(--qb-border);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.05);
+}
+
+.o_inom_queue_board .o_qb_eyebrow {
+    margin-bottom: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--qb-primary);
+}
+
+.o_inom_queue_board .o_qb_header h1 {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: var(--qb-heading);
+}
+
+.o_inom_queue_board .o_qb_header p {
+    margin: 5px 0 0;
+    font-size: 15px;
+    color: var(--qb-muted);
+}
+
+.o_inom_queue_board .o_qb_refresh {
+    flex: 0 0 auto;
+    min-height: 42px;
+    padding: 8px 16px;
+    border: 1px solid #cfd7e3;
+    border-radius: 9px;
+    background: #fff;
+    color: #344054;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.o_inom_queue_board .o_qb_refresh:hover {
+    background: #f8fafc;
+}
+
+/* Filters */
+.o_inom_queue_board .o_qb_filters {
+    display: grid;
+    grid-template-columns: minmax(190px, 1fr) minmax(240px, 1.25fr) minmax(190px, 1fr);
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.o_inom_queue_board .o_qb_filters > div {
+    min-width: 0;
+    padding: 16px 18px;
+    background: #fff;
+    border: 1px solid var(--qb-border);
+    border-radius: 12px;
+}
+
+.o_inom_queue_board .o_qb_filters label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #475467;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+}
+
+.o_inom_queue_board .o_qb_filters input,
+.o_inom_queue_board .o_qb_filters select {
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 11px;
+    border: 1px solid #cfd7e3;
+    border-radius: 8px;
+    background: #fff;
+    color: #101828;
+    font-size: 15px;
+}
+
+/* Summary cards */
+.o_inom_queue_board .o_qb_summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.o_inom_queue_board .o_qb_summary > div {
+    min-height: 92px;
+    padding: 17px 20px;
+    background: #fff;
+    border: 1px solid var(--qb-border);
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(16, 24, 40, .04);
+}
+
+.o_inom_queue_board .o_qb_summary strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.o_inom_queue_board .o_qb_summary span {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--qb-muted);
+}
+
+/* Queue groups */
+.o_inom_queue_board .o_qb_groups {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding-bottom: 20px;
+}
+
+.o_inom_queue_board .o_qb_group {
+    flex: 0 0 auto;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--qb-border);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(16, 24, 40, .05);
+}
+
+.o_inom_queue_board .o_qb_group_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px 22px;
+    border-bottom: 1px solid #e9edf2;
+    background: #fbfcfe;
+}
+
+.o_inom_queue_board .o_qb_group_header h2 {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.3;
+    font-weight: 750;
+    color: #101828;
+}
+
+.o_inom_queue_board .o_qb_group_header p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #667085;
+}
+
+.o_inom_queue_board .o_qb_group_header p span {
+    margin: 0 5px;
+}
+
+.o_inom_queue_board .o_qb_group_count {
+    min-width: 76px;
+    padding: 8px 12px;
+    text-align: center;
+    border: 1px solid #dce3ec;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.o_inom_queue_board .o_qb_group_count strong {
+    display: block;
+    font-size: 22px;
+    line-height: 1.1;
+    color: var(--qb-primary);
+}
+
+.o_inom_queue_board .o_qb_group_count span {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #667085;
+}
+
+/* Table */
+.o_inom_queue_board .o_qb_table_wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.o_inom_queue_board .o_qb_table {
+    width: 100%;
+    min-width: 760px;
+    margin: 0;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.o_inom_queue_board .o_qb_table th {
+    padding: 12px 16px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e4e7ec;
+    color: #667085;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.o_inom_queue_board .o_qb_table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #edf0f3;
+    color: #344054;
+    font-size: 15px;
+    vertical-align: middle;
+}
+
+.o_inom_queue_board .o_qb_table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.o_inom_queue_board .o_qb_table tbody tr:hover {
+    background: #fafbfc;
+}
+
+/* Column sizing */
+.o_inom_queue_board .o_qb_table th:nth-child(1),
+.o_inom_queue_board .o_qb_table td:nth-child(1) {
+    width: 11%;
+}
+
+.o_inom_queue_board .o_qb_table th:nth-child(2),
+.o_inom_queue_board .o_qb_table td:nth-child(2) {
+    width: 34%;
+}
+
+.o_inom_queue_board .o_qb_table th:nth-child(3),
+.o_inom_queue_board .o_qb_table td:nth-child(3) {
+    width: 17%;
+}
+
+.o_inom_queue_board .o_qb_table th:nth-child(4),
+.o_inom_queue_board .o_qb_table td:nth-child(4) {
+    width: 19%;
+}
+
+.o_inom_queue_board .o_qb_table th:nth-child(5),
+.o_inom_queue_board .o_qb_table td:nth-child(5) {
+    width: 19%;
+}
+
+/* Token */
+.o_inom_queue_board .o_qb_token {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 10px;
+    background: #eef4ff;
+    color: #175cd3;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+/* Patient */
+.o_inom_queue_board .o_qb_patient_link {
+    display: block;
+    max-width: 100%;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    color: #175cd3;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.o_inom_queue_board .o_qb_patient_link:hover {
+    text-decoration: underline;
+}
+
+.o_inom_queue_board .o_qb_table td small {
+    display: block;
+    margin-top: 3px;
+    color: #98a2b3;
+    font-size: 12px;
+}
+
+/* Status */
+.o_inom_queue_board .o_qb_badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 750;
+}
+
+/* Keep compatibility with stateClass() names */
+.o_inom_queue_board .o_qb_badge.scheduled {
+    background: #eff8ff;
+    color: #175cd3;
+}
+
+.o_inom_queue_board .o_qb_badge.waiting {
+    background: #fffaeb;
+    color: #b54708;
+}
+
+.o_inom_queue_board .o_qb_badge.in_progress {
+    background: #f4f3ff;
+    color: #5925dc;
+}
+
+.o_inom_queue_board .o_qb_badge.done {
+    background: #ecfdf3;
+    color: #027a48;
+}
+
+.o_inom_queue_board .o_qb_badge.cancelled {
+    background: #f2f4f7;
+    color: #475467;
+}
+
+/* Actions */
+.o_inom_queue_board .o_qb_actions {
+    white-space: nowrap;
+}
+
+.o_inom_queue_board .o_qb_actions .btn {
+    min-height: 34px;
+    padding: 5px 13px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.o_inom_queue_board .o_qb_open {
+    width: 32px;
+    height: 32px;
+    margin-left: 7px;
+    border: 1px solid #d0d5dd;
+    border-radius: 7px;
+    background: #fff;
+    color: #667085;
+    cursor: pointer;
+}
+
+.o_inom_queue_board .o_qb_open:hover {
+    background: #f8fafc;
+    color: var(--qb-primary);
+}
+
+/* Empty/loading */
+.o_inom_queue_board .o_qb_empty {
+    display: flex;
+    min-height: 220px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid var(--qb-border);
+    border-radius: 14px;
+    color: #667085;
+    text-align: center;
+}
+
+.o_inom_queue_board .o_qb_empty i {
+    margin-bottom: 6px;
+    font-size: 28px;
+}
+
+.o_inom_queue_board .o_qb_empty strong {
+    font-size: 17px;
+    color: #344054;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+    .o_inom_queue_board .o_qb_summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .o_inom_queue_board .o_qb_filters {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .o_inom_queue_board {
+        min-height: calc(100vh - 10px);
+        max-height: calc(100vh - 10px);
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .o_inom_queue_board .o_qb_header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .o_inom_queue_board .o_qb_header h1 {
+        font-size: 24px;
+    }
+
+    .o_inom_queue_board .o_qb_refresh {
+        width: 100%;
+    }
+
+    .o_inom_queue_board .o_qb_summary {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .o_inom_queue_board .o_qb_summary > div {
+        min-height: 78px;
+        padding: 13px;
+    }
+
+    .o_inom_queue_board .o_qb_summary strong {
+        font-size: 24px;
+    }
+
+    .o_inom_queue_board .o_qb_group_header {
+        padding: 15px;
+    }
+
+    .o_inom_queue_board .o_qb_group_header h2 {
+        font-size: 17px;
+    }
+}

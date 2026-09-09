@@ -1,0 +1,228 @@
+<odoo>
+
+    <!-- Doctor Tree View -->
+    <record id="doctor_tree" model="ir.ui.view">
+        <field name="name">doctor.tree</field>
+        <field name="model">oeh.doctor</field>
+
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="specialization"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="consultation_fee"/>
+            </list>
+        </field>
+
+    </record>
+
+
+    <!-- Doctor Form View -->
+    <record id="doctor_form" model="ir.ui.view">
+    <field name="name">doctor.form</field>
+    <field name="model">oeh.doctor</field>
+    <field name="arch" type="xml">
+
+        <form>
+
+            <sheet>
+
+                <!-- Smart Buttons -->
+                <div class="oe_button_box" name="button_box">
+
+                    <button name="action_view_attendance"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-calendar">
+                        <field name="attendance_count"
+                               widget="statinfo"
+                               string="Attendance"/>
+                    </button>
+
+                    <button name="action_view_leave"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-clock-o">
+                        <field name="leave_count"
+                               widget="statinfo"
+                               string="Leave"/>
+                    </button>
+
+                    <button name="action_view_today_appointments"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-stethoscope">
+                        <field name="today_token_count"
+                               widget="statinfo"
+                               string="Today's Tokens"/>
+                    </button>
+
+                </div>
+
+                <!-- Status / Queue Alert -->
+                <div class="alert alert-info"
+                     role="alert"
+                     invisible="not now_serving_token">
+
+                    Now Serving Token #
+                    <field name="now_serving_token"
+                           readonly="1"
+                           nolabel="1"/>
+
+                </div>
+
+                <group>
+
+                    <group>
+                        <field name="name"/>
+                        <field name="specialization"/>
+                        <field name="avg_consult_minutes"/>
+                        <field name="consultation_fee"/>
+                    </group>
+
+                    <group>
+                        <field name="phone"/>
+                        <field name="email"/>
+                        <field name="employee_id"/>
+                        <field name="user_id"/>
+                    </group>
+
+                </group>
+
+                <notebook>
+
+                    <page string="Schedule">
+
+                        <p class="text-muted">
+                            Each row is one session. A doctor can have separate
+                            Morning / Afternoon / Evening rows on the same day.
+                            Each session gets its own token series that resets to 1.
+                        </p>
+
+                        <field name="schedule_ids">
+
+                            <list editable="bottom">
+                                <field name="day"/>
+                                <field name="session"/>
+                                <field name="start_time"
+                                       widget="float_time"/>
+                                <field name="end_time"
+                                       widget="float_time"/>
+                                <field name="max_tokens"/>
+                            </list>
+
+                        </field>
+
+                    </page>
+
+                </notebook>
+
+            </sheet>
+
+            <chatter/>
+
+        </form>
+
+    </field>
+</record>
+	<record id="doctor_kanban" model="ir.ui.view">
+    <field name="name">doctor.kanban</field>
+    <field name="model">oeh.doctor</field>
+
+    <field name="arch" type="xml">
+        <kanban class="o_kanban_mobile">
+
+            <field name="name"/>
+            <field name="specialization"/>
+            <field name="phone"/>
+            <field name="email"/>
+
+            <templates>
+                <t t-name="card">
+
+                    <div class="oe_kanban_global_click"
+                         style="border:1px solid #e5e7eb;
+                                border-radius:12px;
+                                background:#ffffff;
+                                padding:16px;
+                                margin:4px;
+                                box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+
+                        <!-- Header -->
+                        <div class="d-flex align-items-center">
+                            <!-- Doctor Name -->
+                            <div class="flex-grow-1">
+
+                                <div style="font-size:17px;
+                                            font-weight:600;
+                                            color:#374151;">
+                                    <field name="name"/>
+                                </div>
+
+                                <div t-if="record.specialization.raw_value"
+                                     style="font-size:13px;
+                                            color:#7c8795;
+                                            margin-top:3px;">
+                                    <field name="specialization"/>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Divider -->
+                        <div style="border-top:1px solid #f0f1f3;
+                                    margin:14px 0;"/>
+
+                        <!-- Contact -->
+                        <div t-if="record.phone.raw_value"
+                             style="font-size:13px;
+                                    color:#6b7280;
+                                    margin-bottom:7px;">
+
+                            <span style="display:inline-block;
+                                         width:24px;
+                                         color:#9aa5b1;">
+                                <i class="fa fa-phone"/>
+                            </span>
+
+                            <field name="phone"/>
+
+                        </div>
+
+                        <div t-if="record.email.raw_value"
+                             style="font-size:13px;
+                                    color:#6b7280;">
+
+                            <span style="display:inline-block;
+                                         width:24px;
+                                         color:#9aa5b1;">
+                                <i class="fa fa-envelope"/>
+                            </span>
+
+                            <field name="email"/>
+
+                        </div>
+
+                    </div>
+
+                </t>
+            </templates>
+
+        </kanban>
+    </field>
+</record>
+
+
+    <!-- Action -->
+    <record id="doctor_action"
+	        model="ir.actions.act_window">
+	
+	    <field name="name">Doctors</field>
+	    <field name="res_model">oeh.doctor</field>
+	    <field name="view_mode">kanban,list,form</field>
+	
+	</record>
+
+</odoo>

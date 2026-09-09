@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_pharmacy_flash_dashboard" model="ir.actions.client">
+        <field name="name">Pharmacy Flash Dashboard</field>
+        <field name="tag">inom_pharmacy_flash_dashboard</field>
+    </record>
+
+    <menuitem id="menu_pharmacy_flash_dashboard"
+              name="Pharmacy Flash Dashboard"
+              parent="inom_healthcare_system.health_root"
+              action="action_pharmacy_flash_dashboard"
+              groups="inom_healthcare_system.group_hospital_manager,inom_healthcare_system.group_hospital_pharmacist"
+              sequence="2"/>
+</odoo>

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =========================================================
+         Product Medicine Form
+         ========================================================= -->
+    <record id="product_product_medicine_form_view" model="ir.ui.view">
+        <field name="name">product.product.medicine.form</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <form>
+                <header/>
+
+                <sheet>
+
+                    <!-- Smart Buttons -->
+                    <div class="oe_button_box" name="button_box">
+
+                        <button name="action_view_stock_moves"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-exchange">
+                            <span class="o_stat_info">
+                                <span class="o_stat_text">Stock Moves</span>
+                            </span>
+                        </button>
+
+                        <button name="action_view_batches"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-cubes">
+                            <field name="batch_count"
+                                   widget="statinfo"
+                                   string="Batches"/>
+                        </button>
+
+                        <button name="action_view_prescription_lines"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-file-text-o">
+                            <field name="prescription_line_count"
+                                   widget="statinfo"
+                                   string="Prescriptions"/>
+                        </button>
+
+                    </div>
+
+                    <!-- Product Title -->
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"
+                                   placeholder="Medicine Name"/>
+                        </h1>
+                    </div>
+
+                    <!-- Medicine Information -->
+                    <group>
+
+                        <group string="Medicine Information">
+                            <field name="is_medicine"/>
+                            <field name="generic_name"/>
+                            <field name="brand_name"/>
+                            <field name="strength"/>
+                            <field name="medicine_type"/>
+                            <field name="drug_category"/>
+                            <field name="is_generic"/>
+                            <field name="is_controlled"/>
+                        </group>
+
+                        <group string="Product Information">
+                            <field name="default_code"/>
+                            <field name="barcode"/>
+                            <field name="categ_id"/>
+                            <field name="uom_id"/>
+                            <field name="list_price"/>
+                            <field name="standard_price"/>
+                            <field name="is_storable"/>
+                        </group>
+
+                    </group>
+
+                    <!-- Stock Information -->
+                    <group string="Stock">
+
+                        <group>
+                            <field name="min_stock"/>
+                            <field name="qty_available"
+                                   readonly="1"/>
+                            <field name="is_low_stock"
+                                   readonly="1"/>
+                        </group>
+
+                        <group>
+                            <field name="nearest_expiry"
+                                   readonly="1"/>
+                            <field name="batch_count"
+                                   readonly="1"/>
+                        </group>
+
+                    </group>
+
+                    <notebook>
+
+                        <page string="Clinical">
+
+                            <group>
+                                <field name="dosage_info"/>
+                                <field name="storage_instructions"/>
+                                <field name="manufacturer_id"/>
+                            </group>
+
+                        </page>
+
+                        <page string="Medicine Batches">
+
+                            <field name="medicine_batch_ids"
+                                   context="{'default_product_id': id}">
+
+                                <list>
+                                    <!-- <field name="name"/> -->
+                                   <!--  <field name="batch_number"/>
+                                    <field name="expiry_date"/>
+                                    <field name="status"/> -->
+                                </list>
+
+                            </field>
+
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+
+                <chatter/>
+
+            </form>
+        </field>
+    </record>
+
+
+    <!-- =========================================================
+         Medicine Product List
+         ========================================================= -->
+    <record id="product_product_medicine_list_view" model="ir.ui.view">
+        <field name="name">product.product.medicine.list</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <list string="Medicines"
+                  decoration-danger="is_low_stock"
+                  decoration-warning="is_controlled">
+
+                <field name="name"/>
+                <field name="default_code" string="Code"/>
+                <field name="generic_name"/>
+                <field name="brand_name"/>
+                <field name="strength"/>
+                <field name="medicine_type"/>
+                <field name="drug_category"/>
+                <field name="manufacturer_id"/>
+                <field name="qty_available" string="On Hand"/>
+                <field name="min_stock" optional="hide"/>
+                <field name="nearest_expiry"/>
+                <field name="is_controlled"/>
+                <field name="is_low_stock"/>
+
+            </list>
+        </field>
+    </record>
+
+
+    <!-- =========================================================
+         Medicine Search
+         ========================================================= -->
+  <!--   <record id="product_product_medicine_search_view" model="ir.ui.view">
+        <field name="name">product.product.medicine.search</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <search>
+
+                <field name="name"
+                       string="Medicine"
+                       filter_domain="[
+                           '|',
+                           '|',
+                           ('name', 'ilike', self),
+                           ('generic_name', 'ilike', self),
+                           ('brand_name', 'ilike', self)
+                       ]"/>
+
+                <field name="default_code"
+                       string="Internal Reference"/>
+
+                <field name="barcode"/>
+
+                <field name="generic_name"/>
+                <field name="brand_name"/>
+                <field name="manufacturer_id"/>
+
+                <separator/>
+
+                <filter name="filter_medicine"
+                        string="Medicines"
+                        domain="[('is_medicine', '=', True)]"/>
+
+                <filter name="filter_low_stock"
+                        string="Low Stock"
+                        domain="[('is_low_stock', '=', True)]"/>
+
+                <filter name="filter_controlled"
+                        string="Controlled"
+                        domain="[('is_controlled', '=', True)]"/>
+
+                <filter name="filter_generic"
+                        string="Generic"
+                        domain="[('is_generic', '=', True)]"/>
+
+                <group>
+
+                    <filter name="group_medicine_type"
+                            string="Medicine Form"
+                            context="{'group_by': 'medicine_type'}"/>
+
+                    <filter name="group_drug_category"
+                            string="Drug Category"
+                            context="{'group_by': 'drug_category'}"/>
+
+                    <filter name="group_manufacturer"
+                            string="Manufacturer"
+                            context="{'group_by': 'manufacturer_id'}"/>
+
+                    <filter name="group_controlled"
+                            string="Controlled"
+                            context="{'group_by': 'is_controlled'}"/>
+
+                </group>
+
+            </search>
+        </field>
+    </record> -->
+
+
+    <!-- =========================================================
+         Medicine Action
+         ========================================================= -->
+    <record id="action_medicine_products" model="ir.actions.act_window">
+        <field name="name">Medicines</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_medicine', '=', True)]</field>
+        <field name="context">{'default_is_medicine': True}</field>
+    </record>
+
+
+    <!-- =========================================================
+         Action Views
+         ========================================================= -->
+    <record id="action_medicine_products_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="product_product_medicine_list_view"/>
+        <field name="act_window_id" ref="action_medicine_products"/>
+    </record>
+
+    <record id="action_medicine_products_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="product_product_medicine_form_view"/>
+        <field name="act_window_id" ref="action_medicine_products"/>
+    </record>
+
+</odoo>

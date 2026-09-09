@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- PRESCRIPTION FORM                                             -->
+    <!-- ============================================================ -->
+    <record id="prescription_form" model="ir.ui.view">
+        <field name="name">oeh.prescription.form</field>
+        <field name="model">oeh.prescription</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_verify" type="object" string="Verify"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_issue" type="object"
+                            string="Issue &amp; Dispense" class="btn-primary"
+                            invisible="state != 'verified'"
+                            confirm="This will reduce pharmacy stock and create a customer invoice. Proceed?"/>
+                    <button name="action_reset" type="object" string="Reset to Draft"
+                            invisible="state != 'verified'"/>
+                    <button name="action_print_prescription" type="object"
+                            string="Print" icon="fa-print"
+                            invisible="state == 'draft'"/>
+                    <button name="action_send_whatsapp" type="object"
+                            string="WhatsApp" icon="fa-whatsapp"
+                            class="btn-success" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,verified,issued"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_picking" type="object"
+                                class="oe_stat_button" icon="fa-truck"
+                                invisible="not picking_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Delivery</span>
+                                <span class="o_stat_value">
+                                    <field name="picking_state" widget="badge"
+                                           decoration-success="picking_state == 'done'"
+                                           decoration-warning="picking_state == 'assigned'"/>
+                                </span>
+                            </div>
+                        </button>
+                        <button name="action_view_invoice" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o"
+                                invisible="not invoice_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Invoice</span>
+                                <span class="o_stat_value">
+                                    <field name="invoice_amount_total" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                </span>
+                            </div>
+                        </button>
+                        <button name="action_view_history" type="object"
+                                class="oe_stat_button" icon="fa-history">
+                            <field name="prescription_count" widget="statinfo" string="History"/>
+                        </button>
+                    </div>
+
+                    <widget name="web_ribbon" title="⚠ Allergy Recorded"
+                            bg_color="text-bg-danger"
+                            invisible="not allergy_warning"/>
+
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Patient &amp; Doctor">
+                            <field name="patient_id" options="{'no_create': True}"/>
+                            <field name="doctor_id" options="{'no_create': True}"/>
+                            <field name="appointment_id"
+                                   domain="[('patient_id','=',patient_id),('doctor_id','=',doctor_id)]"
+                                   options="{'no_create': True}"/>
+                            <field name="date"/>
+                        </group>
+                        <group string="Diagnosis &amp; Audit">
+                            <field name="diagnosis_id"/>
+                            <field name="verified_by" readonly="1"/>
+                            <field name="verified_date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <div class="alert alert-danger mb-2" role="alert"
+                         invisible="not allergy_warning">
+                        <strong>⚠ Allergy / Drug Interaction:</strong>
+                        <field name="allergy_warning"/>
+                    </div>
+
+                    <notebook>
+                        <page string="Medicines" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom" decoration-warning="is_sos">
+                                    <field name="sequence" widget="handle"/>
+                                    <!-- product_id replaces medicine_id -->
+                                    <field name="product_id" string="Medicine" required="1"
+                                           domain="[('is_medicine','=',True)]"
+                                           options="{'no_create': False}"/>
+                                    <field name="on_hand_stock" string="Avl.Stock" widget="badge"
+                                           decoration-danger="stock_status == 'critical'"
+                                           decoration-success="stock_status == 'available'"
+                                           readonly="1"/>
+
+                                    <field name="dose_morning" string="M"/>
+                                    <field name="dose_afternoon" string="A"/>
+                                    <field name="dose_evening" string="E" optional="hide"/>
+                                    <field name="dose_night" string="N"/>
+
+                                    <field name="frequency_display" string="Freq" readonly="1"/>
+                                    <field name="food_timing" string="Food"/>
+                                    <field name="is_sos" string="SOS" optional="hide"/>
+                                    <field name="duration_value" string="Days" optional="show"/>
+                                    <field name="duration_uom" string="Unit" optional="hide"/>
+                                    <field name="total_qty" string="Total Qty" readonly="1"/>
+                                    <field name="instructions" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="General Instructions" name="instructions">
+                            <field name="instruction"
+                                   placeholder="e.g. Drink plenty of water, Take rest, Avoid spicy food…"/>
+                        </page>
+                        <page string="Refill" name="refill">
+                            <group>
+                                <field name="refill_allowed"/>
+                                <field name="refill_count" invisible="not refill_allowed"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- PRESCRIPTION LIST                                             -->
+    <!-- ============================================================ -->
+    <record id="prescription_tree" model="ir.ui.view">
+        <field name="name">oeh.prescription.tree</field>
+        <field name="model">oeh.prescription</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'issued'"
+                  decoration-info="state == 'verified'"
+                  decoration-muted="state == 'draft'">
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="doctor_id" optional="show"/>
+                <field name="date"/>
+                <field name="diagnosis_id" optional="show"/>
+                <field name="line_count" string="Medicines" optional="show"/>
+                <field name="picking_state" string="Delivery" widget="badge" optional="show"
+                       decoration-success="picking_state == 'done'"
+                       decoration-warning="picking_state == 'assigned'"/>
+                <field name="invoice_amount_total" string="Invoice Amt" optional="show"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!-- PRESCRIPTION SEARCH                                           -->
+    <!-- ============================================================ -->
+    <record id="prescription_search" model="ir.ui.view">
+	    <field name="name">oeh.prescription.search</field>
+	    <field name="model">oeh.prescription</field>
+	    <field name="arch" type="xml">
+	        <search>
+	            <field name="name"/>
+	            <field name="patient_id"
+	                   string="Patient / Phone"
+	                   filter_domain="[
+	                       '|',
+	                       ('patient_id.name', 'ilike', self),
+	                       ('patient_id.phone', 'ilike', self)
+	                   ]"/>
+	            <field name="doctor_id"/>
+	            <separator/>
+	            <filter name="filter_today"
+	                    string="Today"
+	                    domain="[('date', '=', context_today())]"/>
+	            <filter name="filter_draft"
+	                    string="Draft"
+	                    domain="[('state', '=', 'draft')]"/>
+	            <filter name="filter_verified"
+	                    string="Verified"
+	                    domain="[('state', '=', 'verified')]"/>
+	            <filter name="filter_issued"
+	                    string="Issued"
+	                    domain="[('state', '=', 'issued')]"/>
+	            <group>
+	                <filter name="group_doctor"
+	                        string="Doctor"
+	                        context="{'group_by': 'doctor_id'}"/>
+	                <filter name="group_date"
+	                        string="Date"
+	                        context="{'group_by': 'date:month'}"/>
+	                <filter name="group_state"
+	                        string="Status"
+	                        context="{'group_by': 'state'}"/>
+	            </group>
+	        </search>
+	    </field>
+	</record>
+
+    <record id="prescription_action" model="ir.actions.act_window">
+        <field name="name">Prescriptions</field>
+        <field name="res_model">oeh.prescription</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="prescription_search"/>
+    </record>
+
+</odoo>

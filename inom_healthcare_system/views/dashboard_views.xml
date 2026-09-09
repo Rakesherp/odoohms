@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Client action that renders the OWL dashboard -->
+    <record id="action_hospital_dashboard" model="ir.actions.client">
+        <field name="name">Hospital Dashboard</field>
+        <field name="tag">inom_healthcare_system.dashboard</field>
+    </record>
+
+</odoo>

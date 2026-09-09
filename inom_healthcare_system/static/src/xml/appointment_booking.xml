@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="inom_healthcare_system.AppointmentBooking">
+        <div class="o_inom_booking_page">
+            <div class="o_ab_header">
+                <div>
+                    <div class="o_ab_eyebrow">FRONT DESK • APPOINTMENT BOOKING</div>
+                    <h1>Book an Appointment</h1>
+                    <p>Select a patient, doctor, date, session and an available time.</p>
+                </div>
+            </div>
+
+            <t t-if="state.confirmation">
+                <div class="o_ab_success_card">
+                    <div class="o_ab_success_icon"><i class="fa fa-check"/></div>
+                    <div class="o_ab_success_body">
+                        <div class="o_ab_eyebrow">APPOINTMENT CONFIRMED</div>
+                        <h2><t t-esc="state.confirmation.appointment_no"/></h2>
+                        <p>
+                            <strong><t t-esc="state.confirmation.patient"/></strong>
+                            • <t t-esc="state.confirmation.doctor"/>
+                            • <t t-esc="state.confirmation.date"/>
+                            • <t t-esc="state.confirmation.time"/>
+                        </p>
+                        <div class="o_ab_confirmation_token">
+                            Token <strong>#<t t-esc="state.confirmation.token"/></strong>
+                            <span><t t-esc="state.confirmation.session"/></span>
+                        </div>
+                        <div class="o_ab_success_actions">
+                            <button type="button" class="btn btn-primary" t-on-click="openAppointment">
+                                <i class="fa fa-file-text-o"/> Open Appointment
+                            </button>
+                            <button type="button" class="btn btn-secondary" t-on-click="resetBooking">
+                                Book Another Appointment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <t t-else="">
+                <div class="o_ab_grid">
+                    <section class="o_ab_card o_ab_patient_card">
+                        <div class="o_ab_card_title">
+                            <span class="o_ab_step">1</span>
+                            <div><h3>Patient</h3><p>Search by name, Patient ID or phone</p></div>
+                        </div>
+                        <div class="o_ab_combo">
+                            <div class="o_ab_search o_ab_combo_input">
+                                <i class="fa fa-search" title="Search patient" aria-label="Search patient"/>
+                                <input type="text"
+                                       t-att-value="state.patientSearch"
+                                       placeholder="Search or select patient…"
+                                       autocomplete="off"
+                                       t-on-focus="() => this.state.patientDropdownOpen = true"
+                                       t-on-input="onPatientSearch"/>
+                                <button type="button" class="o_ab_combo_toggle"
+                                        title="Show patients" aria-label="Show patients"
+                                        t-on-click.stop="togglePatientDropdown">
+                                    <i class="fa fa-chevron-down" title="Show patients" aria-label="Show patients"/>
+                                </button>
+                            </div>
+                            <div t-if="state.patientDropdownOpen" class="o_ab_dropdown">
+                                <div t-if="state.patients.length">
+                                    <div t-foreach="state.patients" t-as="patient" t-key="patient.id"
+                                         class="o_ab_patient_result" t-on-click="() => this.selectPatient(patient)">
+                                        <div class="o_ab_avatar"><t t-esc="patient.name.substring(0,1).toUpperCase()"/></div>
+                                        <div class="o_ab_patient_result_text">
+                                            <strong><t t-esc="patient.name"/></strong>
+                                            <span><t t-esc="patient.code"/> <t t-if="patient.phone">• <t t-esc="patient.phone"/></t></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div t-else="" class="o_ab_dropdown_empty">
+                                    <i class="fa fa-user-o" title="No patients" aria-label="No patients"/>
+                                    <span>No matching patients found.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div t-if="state.patient" class="o_ab_selected_patient">
+                            <div class="o_ab_avatar"><t t-esc="state.patient.name.substring(0,1).toUpperCase()"/></div>
+                            <div class="o_ab_selected_text">
+                                <strong><t t-esc="state.patient.name"/></strong>
+                                <span><t t-esc="state.patient.code"/> <t t-if="state.patient.phone">• <t t-esc="state.patient.phone"/></t></span>
+                            </div>
+                            <button type="button" class="o_ab_clear" title="Clear patient" aria-label="Clear patient" t-on-click="clearPatient">
+                                <i class="fa fa-times" title="Clear patient" aria-label="Clear patient"/>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="o_ab_card o_ab_doctor_card">
+                        <div class="o_ab_card_title">
+                            <span class="o_ab_step">2</span>
+                            <div><h3>Doctor</h3><p>Search or select any available doctor</p></div>
+                        </div>
+                        <div class="o_ab_combo">
+                            <div class="o_ab_search o_ab_combo_input">
+                                <i class="fa fa-user-md" title="Search doctor" aria-label="Search doctor"/>
+                                <input type="text"
+                                       t-att-value="state.doctorSearch"
+                                       placeholder="Search or select doctor…"
+                                       autocomplete="off"
+                                       t-on-focus="() => { this.state.doctorDropdownOpen = true; this.state.doctorSearch = ''; }"
+                                       t-on-input="onDoctorSearch"/>
+                                <button type="button" class="o_ab_combo_toggle"
+                                        title="Show doctors" aria-label="Show doctors"
+                                        t-on-click.stop="toggleDoctorDropdown">
+                                    <i class="fa fa-chevron-down" title="Show doctors" aria-label="Show doctors"/>
+                                </button>
+                            </div>
+                            <div t-if="state.doctorDropdownOpen" class="o_ab_dropdown o_ab_doctor_dropdown">
+                                <div t-if="filteredDoctors().length">
+                                    <div t-foreach="filteredDoctors()" t-as="doctor" t-key="doctor.id"
+                                         class="o_ab_patient_result" t-on-click="() => this.selectDoctor(doctor)">
+                                        <div class="o_ab_avatar o_ab_doctor_avatar"><i class="fa fa-user-md" title="Doctor" aria-label="Doctor"/></div>
+                                        <div class="o_ab_patient_result_text">
+                                            <strong><t t-esc="doctor.name"/></strong>
+                                            <span t-if="doctor.specialization"><t t-esc="doctor.specialization"/></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div t-else="" class="o_ab_dropdown_empty">
+                                    <i class="fa fa-user-md" title="No doctors" aria-label="No doctors"/>
+                                    <span>No matching doctors found.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="o_ab_card">
+                        <div class="o_ab_card_title">
+                            <span class="o_ab_step">3</span>
+                            <div><h3>Date</h3><p>Choose the consultation date</p></div>
+                        </div>
+                        <input class="o_ab_date" type="date" t-att-value="state.date" t-on-change="onDateChange"/>
+                    </section>
+
+                    <section class="o_ab_card">
+                        <div class="o_ab_card_title">
+                            <span class="o_ab_step">4</span>
+                            <div><h3>Session</h3><p>Based on the doctor's schedule</p></div>
+                        </div>
+                        <select class="o_ab_select" t-on-change="onSessionChange" t-att-disabled="!state.doctorId">
+                            <option value="">Select Session</option>
+                            <t t-foreach="state.data.sessions" t-as="session" t-key="session.key">
+                                <option t-att-value="session.key" t-att-selected="state.session === session.key ? true : undefined">
+                                    <t t-esc="session.label"/> • <t t-esc="session.start"/> – <t t-esc="session.end"/>
+                                </option>
+                            </t>
+                        </select>
+                        <div t-if="state.doctorId &amp;&amp; !state.data.sessions.length &amp;&amp; !state.loading" class="o_ab_hint danger">
+                            <i class="fa fa-exclamation-circle"/> No consulting session is configured for this doctor on the selected date.
+                        </div>
+                    </section>
+                </div>
+
+                <section class="o_ab_card o_ab_slots_card">
+                    <div class="o_ab_card_title">
+                        <span class="o_ab_step">5</span>
+                        <div>
+                            <h3>Available Time</h3>
+                            <p>Booked times are disabled automatically</p>
+                        </div>
+                        <div class="o_ab_legend">
+                            <span><i class="available"/> Available</span>
+                            <span><i class="booked"/> Booked</span>
+                            <span><i class="selected"/> Selected</span>
+                        </div>
+                    </div>
+
+                    <t t-if="state.loading">
+                        <div class="o_ab_loading"><i class="fa fa-spinner fa-spin"/> Loading available slots…</div>
+                    </t>
+                    <t t-elif="state.data.slots.length">
+                        <div class="o_ab_slots">
+                            <button t-foreach="state.data.slots" t-as="slot" t-key="slot.key"
+                                    type="button"
+                                    t-att-disabled="!slot.available"
+                                    t-att-class="'o_ab_slot ' + (slot.available ? 'available' : 'unavailable') + (state.slot &amp;&amp; state.slot.key === slot.key ? ' selected' : '')"
+                                    t-on-click="() => this.selectSlot(slot)">
+                                <strong><t t-esc="slot.label"/></strong>
+                                <small t-if="!slot.available"><t t-esc="slot.reason"/></small>
+                            </button>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="o_ab_empty_slots">
+                            <i class="fa fa-clock-o"/>
+                            <span>Select a doctor and session to see available times.</span>
+                        </div>
+                    </t>
+                </section>
+
+                <section class="o_ab_card o_ab_reason_card">
+                    <div class="o_ab_card_title">
+                        <span class="o_ab_step">6</span>
+                        <div><h3>Chief Complaint <small>(Optional)</small></h3><p>Add a short reason for today's visit</p></div>
+                    </div>
+                    <textarea rows="3" placeholder="e.g. Fever for 2 days, follow-up, routine review…" t-on-input="onComplaintChange"><t t-esc="state.complaint"/></textarea>
+                </section>
+
+                <div class="o_ab_footer">
+                    <div class="o_ab_selected_summary">
+                        <t t-if="state.patient &amp;&amp; state.slot">
+                            <strong><t t-esc="state.patient.name"/></strong>
+                            <span> • <t t-esc="state.slot.label"/></span>
+                        </t>
+                        <t t-else="">
+                            <span>Select patient, doctor and time to continue.</span>
+                        </t>
+                    </div>
+                    <button type="button" class="btn btn-primary o_ab_book_btn"
+                            t-att-disabled="!this.canBook()"
+                            t-on-click="book">
+                        <t t-if="state.saving"><i class="fa fa-spinner fa-spin"/> Booking…</t>
+                        <t t-else=""><i class="fa fa-calendar-check-o"/> Book Appointment</t>
+                    </button>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

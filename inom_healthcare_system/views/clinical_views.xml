@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="clinical_tree" model="ir.ui.view">
+        <field name="name">clinical.tree</field>
+        <field name="model">oeh.clinical</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="consultation_date"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="appointment_id"/>
+                <field name="state" widget="badge"/>
+                <field name="diagnosis_id"/>
+                <field name="followup_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="clinical_form" model="ir.ui.view">
+        <field name="name">clinical.form</field>
+        <field name="model">oeh.clinical</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" string="Start Consultation"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_complete" type="object" string="Complete Consultation"
+                            class="btn-primary" invisible="state == 'done'"/>
+                    <button name="action_new_prescription" type="object" string="New Prescription"
+                            class="btn-secondary" invisible="not patient_id"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-danger" role="alert"
+                         invisible="not allergy_warning">
+                        <i class="fa fa-exclamation-triangle me-2" title="Warning" aria-label="Warning"/>
+                        <strong>ALLERGY ALERT:</strong>
+                        <field name="allergy_warning" readonly="1"/>
+                    </div>
+
+                    <div class="oe_title">
+                        <h2>Clinical Consultation</h2>
+                        <div class="text-muted">Complete the patient's consultation in one workspace.</div>
+                    </div>
+
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_prescriptions" type="object" class="oe_stat_button" icon="fa-medkit">
+                            <field name="prescription_count" widget="statinfo" string="Prescriptions"/>
+                        </button>
+                        <button name="action_view_labs" type="object" class="oe_stat_button" icon="fa-flask">
+                            <field name="lab_count" widget="statinfo" string="Lab"/>
+                        </button>
+                        <button name="action_view_radiology" type="object" class="oe_stat_button" icon="fa-image">
+                            <field name="radiology_count" widget="statinfo" string="Radiology"/>
+                        </button>
+                    </div>
+
+                    <group>
+                        <group string="Patient">
+                            <field name="patient_id"/>
+                            <field name="appointment_id"/>
+                            <field name="consultation_date"/>
+                            <field name="patient_phone"/>
+                        </group>
+                        <group string="Clinician">
+                            <field name="doctor_id"/>
+                            <field name="followup_date"/>
+                            <button name="action_view_patient" type="object" string="Open Patient 360" class="btn-link"/>
+                        </group>
+                    </group>
+
+                    <group string="Latest Patient Vitals" col="4">
+                        <group string="Identity">
+                            <field name="patient_age"/>
+                            <field name="patient_gender"/>
+                            <field name="patient_blood_group"/>
+                        </group>
+                        <group string="Vitals">
+                            <field name="patient_bp_systolic"/>
+                            <field name="patient_bp_diastolic"/>
+                            <field name="patient_pulse"/>
+                            <field name="patient_spo2"/>
+                        </group>
+                        <group string="Body">
+                            <field name="patient_temperature"/>
+                            <field name="patient_respiratory_rate"/>
+                            <field name="patient_weight"/>
+                            <field name="patient_height"/>
+                        </group>
+                        <group string="Clinical">
+                            <field name="patient_bmi"/>
+                            <field name="patient_blood_glucose"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Consultation">
+                            <group>
+                                <field name="chief_complaint" placeholder="Why is the patient here today?"/>
+                                <field name="symptoms" placeholder="History, symptoms, duration, relevant context…"/>
+                                <field name="examination" widget="html" placeholder="Clinical examination findings…"/>
+                            </group>
+                        </page>
+
+                        <page string="Diagnosis &amp; Plan">
+                            <group>
+                                <field name="diagnosis_id"/>
+                                <field name="diagnosis" placeholder="Assessment / diagnosis notes…"/>
+                                <field name="plan" widget="html" placeholder="Treatment plan, advice and next steps…"/>
+                            </group>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes" widget="html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="clinical_action" model="ir.actions.act_window">
+        <field name="name">Clinical Evaluations</field>
+        <field name="res_model">oeh.clinical</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

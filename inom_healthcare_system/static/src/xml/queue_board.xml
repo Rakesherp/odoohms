@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="inom_healthcare_system.QueueBoard">
+        <div class="o_inom_queue_board">
+            <div class="o_qb_header">
+                <div>
+                    <div class="o_qb_eyebrow">HOSPITAL OPERATIONS • TOKEN BOARD</div>
+                    <h1>Queue / Token Board</h1>
+                    <p>Live view by Doctor • Date • Session</p>
+                </div>
+                <button type="button" class="o_qb_refresh" t-on-click="refresh">
+                    <i class="fa fa-refresh"/> Refresh
+                </button>
+            </div>
+
+            <div class="o_qb_filters">
+                <div>
+                    <label>Date</label>
+                    <input type="date" t-att-value="state.date" t-on-change="onDateChange"/>
+                </div>
+                <div>
+                    <label>Doctor</label>
+                    <select t-att-value="state.doctorId" t-on-change="onDoctorChange">
+                        <option value="">All Doctors</option>
+                        <t t-foreach="state.data.doctors" t-as="doctor" t-key="doctor.id">
+                            <option t-att-value="doctor.id">
+                                <t t-esc="doctor.name"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+                <div>
+                    <label>Session</label>
+                    <select t-att-value="state.session" t-on-change="onSessionChange">
+                        <option value="">All Sessions</option>
+                        <option value="morning">Morning</option>
+                        <option value="afternoon">Afternoon</option>
+                        <option value="evening">Evening</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="o_qb_summary" role="status">
+                <div class="scheduled">
+                    <strong><t t-esc="state.data.summary.scheduled || 0"/></strong>
+                    <span>Scheduled</span>
+                </div>
+                <div class="waiting">
+                    <strong><t t-esc="state.data.summary.waiting || 0"/></strong>
+                    <span>Waiting</span>
+                </div>
+                <div class="in_progress">
+                    <strong><t t-esc="state.data.summary.in_progress || 0"/></strong>
+                    <span>In Consultation</span>
+                </div>
+                <div class="done">
+                    <strong><t t-esc="state.data.summary.done || 0"/></strong>
+                    <span>Completed</span>
+                </div>
+            </div>
+
+            <t t-if="state.loading">
+                <div class="o_qb_empty">
+                    <i class="fa fa-spinner fa-spin"/>
+                    <span>Loading token board…</span>
+                </div>
+            </t>
+
+            <t t-elif="state.data.groups.length">
+                <div class="o_qb_groups" role="region" aria-label="Doctor token queues">
+                    <section
+                        t-foreach="state.data.groups"
+                        t-as="group"
+                        t-key="group.doctor_id + '-' + group.session"
+                        class="o_qb_group"
+                    >
+                        <div class="o_qb_group_header">
+                            <div>
+                                <h2><t t-esc="group.doctor"/></h2>
+                                <p>
+                                    <t t-esc="group.specialization"/>
+                                    <span>•</span>
+                                    <t t-esc="group.session_label"/>
+                                </p>
+                            </div>
+                            <div class="o_qb_group_count">
+                                <strong><t t-esc="group.tokens.length"/></strong>
+                                <span>Tokens</span>
+                            </div>
+                        </div>
+
+                        <div class="o_qb_table_wrap">
+                            <table class="o_qb_table">
+                                <thead>
+                                    <tr>
+                                        <th>Token</th>
+                                        <th>Patient</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        t-foreach="group.tokens"
+                                        t-as="token"
+                                        t-key="token.id"
+                                    >
+                                        <td>
+                                            <span class="o_qb_token">
+                                                <t t-esc="token.token"/>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button
+                                                type="button"
+                                                class="o_qb_patient_link"
+                                                t-on-click="() => this.openPatient(token.patient_id)"
+                                            >
+                                                <t t-esc="token.patient"/>
+                                            </button>
+                                            <small>
+                                                <t t-esc="token.patient_code"/>
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <t t-esc="token.time || 'Walk-in'"/>
+                                        </td>
+                                        <td>
+                                            <span t-att-class="'o_qb_badge ' + this.stateClass(token.state)">
+                                                <t t-esc="token.state_label"/>
+                                            </span>
+                                        </td>
+                                        <td class="o_qb_actions">
+                                            <button
+                                                t-if="token.state === 'scheduled'"
+                                                type="button"
+                                                class="btn btn-sm btn-outline-primary"
+                                                t-on-click="() => this.actionToken(token.id, 'action_check_in')"
+                                            >
+                                                Check In
+                                            </button>
+                                            <button
+                                                t-if="token.state === 'waiting'"
+                                                type="button"
+                                                class="btn btn-sm btn-primary"
+                                                t-on-click="() => this.actionToken(token.id, 'action_start')"
+                                            >
+                                                Call
+                                            </button>
+                                            <button
+                                                t-if="token.state === 'in_progress'"
+                                                type="button"
+                                                class="btn btn-sm btn-success"
+                                                t-on-click="() => this.actionToken(token.id, 'action_done')"
+                                            >
+                                                Done
+                                            </button>
+                                            <button
+                                                t-if="token.appointment_id"
+                                                type="button"
+                                                class="o_qb_open"
+                                                t-on-click="() => this.openAppointment(token.appointment_id)"
+                                            >
+                                                <i class="fa fa-external-link"/>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </t>
+
+            <t t-else="">
+                <div class="o_qb_empty">
+                    <i class="fa fa-users"/>
+                    <strong>No queue for this selection.</strong>
+                    <span>Try another date, doctor or session.</span>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_res_users_form_hospital_roles" model="ir.ui.view">
+        <field name="name">res.users.form.hospital.roles</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="hospital_roles" string="Hospital Roles">
+                    <div class="alert alert-info" role="alert">
+                        <strong>Hospital Access</strong>
+                        <div>
+                            Select any combination of roles. A user can have multiple
+                            roles such as Doctor + Pharmacist + Billing &amp; Payments.
+                        </div>
+                    </div>
+
+                    <group string="Clinical &amp; Front Office" col="2">
+                        <group>
+                            <field name="is_hospital_manager"/>
+                            <field name="is_hospital_receptionist"/>
+                            <field name="is_hospital_doctor"/>
+                            <field name="is_hospital_nurse"/>
+                        </group>
+                        <group>
+                            <field name="is_hospital_pharmacist"/>
+                            <field name="is_hospital_lab"/>
+                            <field name="is_hospital_radiology"/>
+                            <field name="is_hospital_billing"/>
+                            <field name="is_hospital_insurance"/>
+                        </group>
+                    </group>
+
+                    <div class="text-muted mt-2">
+                        <i class="fa fa-info-circle"/> Hospital Manager / Admin includes all hospital roles.
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

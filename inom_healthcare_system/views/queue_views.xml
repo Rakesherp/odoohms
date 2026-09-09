@@ -1,0 +1,152 @@
+<odoo>
+
+    <!-- Queue Tree View -->
+    <record id="queue_tree" model="ir.ui.view">
+        <field name="name">queue.tree</field>
+        <field name="model">oeh.queue</field>
+
+        <field name="arch" type="xml">
+            <list decoration-info="state in ('scheduled', 'in_progress')" decoration-success="state == 'done'"
+                  decoration-muted="state in ('cancel','no_show')"
+                  default_order="queue_date desc, session, token_no">
+                <field name="queue_date"/>
+                <field name="session"/>
+                <field name="token_no"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="check_in_time"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Token board: what the front desk / doctor's assistant looks at
+         all day. Grouped by state so "Waiting" vs "In Progress" vs "Done"
+         is visually obvious, big token number front and center. -->
+    <record id="queue_kanban" model="ir.ui.view">
+        <field name="name">queue.kanban</field>
+        <field name="model">oeh.queue</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="token_no"/>
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="session"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card p-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong style="font-size: 1.6em;"><field name="token_no"/></strong>
+                                <field name="session" widget="badge"/>
+                            </div>
+                            <div><field name="patient_id"/></div>
+                            <div class="text-muted"><field name="doctor_id"/></div>
+                            <div class="mt-2">
+                                <button name="action_call_next" type="object"
+                                        string="Call" class="btn btn-sm btn-primary"
+                                        invisible="state != 'waiting'"/>
+                                <button name="action_done" type="object"
+                                        string="Done" class="btn btn-sm btn-success"
+                                        invisible="state != 'in_progress'"/>
+                                <button name="action_no_show" type="object"
+                                        string="No Show" class="btn btn-sm btn-secondary"
+                                        invisible="state != 'waiting'"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="queue_search" model="ir.ui.view">
+        <field name="name">queue.search</field>
+        <field name="model">oeh.queue</field>
+        <field name="arch" type="xml">
+            <search string="Queue">
+                <field name="patient_id"/>
+                <field name="doctor_id"/>
+                <field name="token_no"/>
+                <filter string="Today" name="filter_today"
+                        domain="[('queue_date','=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="My Patients" name="filter_mine"
+                        domain="[('doctor_id.user_id','=', uid)]"/>
+                <separator/>
+                <filter string="Scheduled" name="filter_scheduled" domain="[('state','=','scheduled')]"/>
+                <filter string="Waiting" name="filter_waiting" domain="[('state','=','waiting')]"/>
+                <filter string="In Progress" name="filter_progress" domain="[('state','=','in_progress')]"/>
+                <group>
+                    <filter string="Doctor" name="group_doctor" context="{'group_by': 'doctor_id'}"/>
+                    <filter string="Session" name="group_session" context="{'group_by': 'session'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Queue Form View -->
+    <record id="queue_form" model="ir.ui.view">
+        <field name="name">queue.form</field>
+        <field name="model">oeh.queue</field>
+
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" string="Start"
+                            class="btn-primary" invisible="state != 'waiting'"/>
+                    <button name="action_done" type="object" string="Done"
+                            invisible="state != 'in_progress'"/>
+                    <button name="action_no_show" type="object" string="No Show"
+                            invisible="state != 'waiting'"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state in ('done','cancel')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="scheduled,waiting,in_progress,done"/>
+                </header>
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="token_no" readonly="1"/>
+                            <field name="queue_date"/>
+                            <field name="session"/>
+                        </group>
+                        <group>
+                            <field name="patient_id"/>
+                            <field name="doctor_id"/>
+                            <field name="appointment_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Timeline">
+                        <field name="check_in_time" readonly="1"/>
+                        <field name="called_time" readonly="1"/>
+                        <field name="done_time" readonly="1"/>
+                    </group>
+
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+
+    </record>
+
+
+    <!-- Queue Action -->
+    <record id="queue_action"
+            model="ir.actions.act_window">
+
+        <field name="name">Queue / Token Board</field>
+
+        <field name="res_model">oeh.queue</field>
+
+        <field name="view_mode">kanban,list,form</field>
+
+        <field name="search_view_id" ref="queue_search"/>
+
+        <field name="context">{'search_default_filter_today': 1}</field>
+
+    </record>
+
+</odoo>

@@ -1,0 +1,94 @@
+/* Phase 2A - Doctor Workspace */
+.o_inom_doctor_dashboard {
+    min-height: 100%;
+    padding: 22px;
+    background: #f7f9fc;
+    color: #1e293b;
+}
+.o_drd_header {
+    display:flex; justify-content:space-between; align-items:center; gap:20px;
+    padding:22px 24px; border:1px solid #e2e8f0; border-radius:18px;
+    background:#fff; box-shadow:0 8px 28px rgba(15,23,42,.06);
+}
+.o_drd_eyebrow { color:#2563eb; font-size:11px; font-weight:800; letter-spacing:1.2px; }
+.o_drd_header h1 { margin:5px 0 2px; font-size:27px; font-weight:800; color:#172554; }
+.o_drd_header p { margin:0; color:#64748b; font-size:12px; }
+.o_drd_header_actions { display:flex; align-items:center; gap:12px; }
+.o_drd_now { display:flex; align-items:center; gap:10px; padding:9px 14px; border-radius:12px; background:#ecfdf5; border:1px solid #bbf7d0; }
+.o_drd_now span { color:#15803d; font-size:9px; font-weight:800; }
+.o_drd_now strong { color:#166534; font-size:20px; }
+.o_drd_now em { color:#334155; font-style:normal; font-size:12px; font-weight:700; }
+.o_drd_refresh { border:1px solid #dbe3ee; background:#fff; color:#2563eb; border-radius:10px; padding:9px 13px; cursor:pointer; }
+
+.o_drd_kpis { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin:15px 0; }
+.o_drd_kpi { display:flex; align-items:center; gap:11px; min-height:86px; padding:14px; border:1px solid #e2e8f0; border-radius:15px; background:#fff; box-shadow:0 5px 18px rgba(15,23,42,.045); cursor:pointer; }
+.o_drd_kpi i { width:42px; height:42px; display:grid; place-items:center; border-radius:12px; font-size:18px; }
+.o_drd_kpi strong { display:block; font-size:24px; line-height:1; }
+.o_drd_kpi span { display:block; margin-top:5px; color:#64748b; font-size:9px; font-weight:700; }
+.o_drd_kpi.blue i { color:#2563eb; background:#eff6ff; } .o_drd_kpi.blue strong{color:#2563eb;}
+.o_drd_kpi.orange i { color:#ea580c; background:#fff7ed; } .o_drd_kpi.orange strong{color:#ea580c;}
+.o_drd_kpi.teal i { color:#0f766e; background:#f0fdfa; } .o_drd_kpi.teal strong{color:#0f766e;}
+.o_drd_kpi.green i { color:#16a34a; background:#f0fdf4; } .o_drd_kpi.green strong{color:#16a34a;}
+.o_drd_kpi.purple i { color:#7c3aed; background:#f5f3ff; } .o_drd_kpi.purple strong{color:#7c3aed;}
+.o_drd_kpi.red i { color:#dc2626; background:#fff1f2; } .o_drd_kpi.red strong{color:#dc2626;}
+
+.o_drd_alerts { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px; }
+.o_drd_alert { display:flex; align-items:center; gap:10px; min-width:260px; padding:10px 13px; border-radius:12px; border:1px solid; background:#fff; }
+.o_drd_alert i { font-size:16px; } .o_drd_alert div { flex:1; } .o_drd_alert strong,.o_drd_alert span {display:block;}
+.o_drd_alert strong {font-size:11px;} .o_drd_alert span {font-size:9px;color:#64748b;margin-top:2px;} .o_drd_alert b{font-size:18px;}
+.o_drd_alert.danger{border-color:#fecdd3;background:#fff7f8;color:#be123c}.o_drd_alert.warning{border-color:#fed7aa;background:#fffaf5;color:#c2410c}.o_drd_alert.info{border-color:#bfdbfe;background:#f8fbff;color:#1d4ed8}
+
+.o_drd_main_grid { display:grid; grid-template-columns:1.65fr 1fr; gap:15px; }
+.o_drd_bottom_grid { display:grid; grid-template-columns:1.65fr 1fr; gap:15px; margin-top:15px; }
+.o_drd_card { border:1px solid #e2e8f0; border-radius:16px; background:#fff; box-shadow:0 6px 22px rgba(15,23,42,.045); overflow:hidden; }
+.o_drd_card_head { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:17px 18px; border-bottom:1px solid #edf1f6; }
+.o_drd_card_head h3 { margin:0; color:#172554; font-size:15px; font-weight:800; }
+.o_drd_card_head p { margin:3px 0 0; color:#94a3b8; font-size:9px; }
+.o_drd_card_head button { border:0; background:transparent; color:#2563eb; font-size:10px; font-weight:800; cursor:pointer; }
+
+.o_drd_table_wrap { overflow:auto; }
+.o_drd_table_wrap table { width:100%; border-collapse:collapse; }
+.o_drd_table_wrap th { padding:10px 12px; text-align:left; color:#94a3b8; background:#fafcff; font-size:9px; text-transform:uppercase; letter-spacing:.4px; }
+.o_drd_table_wrap td { padding:11px 12px; border-top:1px solid #f1f5f9; font-size:10px; vertical-align:middle; }
+.o_drd_time { color:#334155; font-weight:800; white-space:nowrap; }
+.o_drd_patient_name { color:#1e40af; font-weight:750; cursor:pointer; }
+.o_drd_table_wrap small { color:#94a3b8; font-size:8px; }
+.o_drd_allergy,.o_drd_card_allergy { display:block; color:#dc2626; font-size:8px; font-weight:800; margin-top:3px; }
+.o_drd_token { display:inline-flex; min-width:28px; justify-content:center; padding:4px 7px; border-radius:7px; background:#eff6ff; color:#1d4ed8; font-weight:800; }
+.o_drd_badge { display:inline-block; padding:4px 8px; border-radius:999px; font-size:8px; font-weight:800; }
+.o_drd_badge.draft,.o_drd_badge.muted{color:#64748b;background:#f1f5f9}.o_drd_badge.confirmed,.o_drd_badge.waiting{color:#c2410c;background:#fff7ed}.o_drd_badge.progress{color:#0369a1;background:#e0f2fe}.o_drd_badge.done{color:#15803d;background:#f0fdf4}.o_drd_badge.danger{color:#b91c1c;background:#fff1f2}
+.o_drd_consult_btn { border:0; border-radius:8px; background:#2563eb; color:#fff; padding:6px 8px; font-size:8px; font-weight:800; cursor:pointer; }
+.o_drd_queue { padding:8px 12px 14px; max-height:390px; overflow:auto; }
+.o_drd_queue_row { display:flex; align-items:center; gap:10px; padding:10px 5px; border-bottom:1px solid #f1f5f9; }
+.o_drd_big_token { width:38px; height:38px; display:grid; place-items:center; border-radius:10px; color:#2563eb; background:#eff6ff; font-size:16px; font-weight:900; }
+.o_drd_queue_patient { flex:1; cursor:pointer; }
+.o_drd_queue_patient strong,.o_drd_queue_patient span {display:block}.o_drd_queue_patient strong{font-size:11px}.o_drd_queue_patient span{font-size:8px;color:#94a3b8;margin-top:2px}
+
+.o_drd_patient_grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:14px; }
+.o_drd_patient_card { display:flex; gap:10px; padding:11px; border:1px solid #e7edf4; border-radius:12px; background:#fbfdff; cursor:pointer; }
+.o_drd_patient_card:hover { border-color:#bfdbfe; background:#f8fbff; }
+.o_drd_avatar { width:36px; height:36px; flex:0 0 36px; display:grid; place-items:center; border-radius:50%; color:#2563eb; background:#dbeafe; font-weight:900; }
+.o_drd_patient_card_body { min-width:0; }.o_drd_patient_card_body strong,.o_drd_patient_card_body span{display:block}.o_drd_patient_card_body strong{font-size:11px}.o_drd_patient_card_body span{font-size:8px;color:#64748b;margin-top:3px}
+.o_drd_quick_grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:16px; }
+.o_drd_quick_grid button { min-height:68px; border:1px solid #e2e8f0; border-radius:12px; background:#fbfdff; color:#334155; font-size:10px; font-weight:750; cursor:pointer; }
+.o_drd_quick_grid button i { display:block; margin-bottom:7px; color:#2563eb; font-size:18px; }
+.o_drd_no_data { min-height:190px; display:grid; place-content:center; justify-items:center; gap:8px; color:#94a3b8; font-size:11px; }
+.o_drd_no_data i {font-size:28px;color:#cbd5e1}.o_drd_no_data.small{min-height:110px}
+.o_drd_loading,.o_drd_empty {min-height:65vh;display:grid;place-content:center;justify-items:center;gap:10px;color:#64748b}.o_drd_loading i{font-size:28px;color:#2563eb}.o_drd_empty i{font-size:42px;color:#cbd5e1}.o_drd_empty h3{margin:0;color:#334155}.o_drd_empty p{margin:0;font-size:11px}
+
+@media (max-width:1200px){.o_drd_kpis{grid-template-columns:repeat(3,1fr)}.o_drd_main_grid,.o_drd_bottom_grid{grid-template-columns:1fr}}
+@media (max-width:700px){.o_inom_doctor_dashboard{padding:10px}.o_drd_header{align-items:flex-start;flex-direction:column}.o_drd_kpis{grid-template-columns:1fr 1fr}.o_drd_patient_grid{grid-template-columns:1fr}}
+
+
+/* Phase 2.2 - Doctor workspace / Patient 360 polish */
+.o_drd_consult_btn { white-space: nowrap; }
+.o_drd_patient_name:hover, .o_drd_queue_patient:hover { text-decoration: underline; }
+@media (max-width: 700px) {
+    .o_drd_header h1 { font-size: 22px; }
+    .o_drd_kpi { min-height: 74px; padding: 11px; }
+    .o_drd_kpi i { width: 36px; height: 36px; font-size: 15px; }
+    .o_drd_kpi strong { font-size: 20px; }
+    .o_drd_card_head { align-items: flex-start; }
+    .o_drd_table_wrap { max-width: 100%; }
+    .o_drd_table_wrap table { min-width: 640px; }
+}

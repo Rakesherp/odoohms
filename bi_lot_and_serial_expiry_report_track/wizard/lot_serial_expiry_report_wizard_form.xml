@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="lot_serial_expiry_report_wizard_form" model="ir.ui.view">
+        <field name="name">lot.serial.expiry.report.wizard.form</field>
+        <field name="model">lot.serial.expiry.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Lot and Serial Expiry Report">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="selection_report" widget='radio'/>
+                        </group>
+                        <group>
+                            <label for="expire_within"/>
+                            <div>
+                                <field name="expire_within" class="oe_inline" required="1"/>
+                                <span> days</span>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="product_ids" widget="many2many_tags" 
+                                invisible= "selection_report == 'lot_wise' or
+                                not selection_report" 
+                                required= "selection_report == 'product_wise'"/>
+                            <field name="lot_serial_ids" widget="many2many_tags" invisible="selection_report == 'product_wise' or not selection_report" required="selection_report == 'lot_wise'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_expiry_report" string="Print Report"  type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="lot_serial_expiry_report_wizard_action" model="ir.actions.act_window">
+        <field name="name">Lot and Serial Expiry Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">lot.serial.expiry.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

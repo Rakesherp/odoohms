@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="insurance_phase23_form_inherit" model="ir.ui.view">
+        <field name="name">oeh.insurance.claim.form.ipd.management</field>
+        <field name="model">oeh.insurance.claim</field>
+        <field name="inherit_id" ref="inom_healthcare_system.insurance_claim_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Insurance / Member ID -->
+            <xpath expr="//field[@name='policy_number']" position="after">
+
+                <field name="patient_card_number"/>
+
+                <field name="eligibility_verified"/>
+
+                <field name="eligibility_verified_date"
+                       readonly="1"/>
+
+            </xpath>
+
+            <!-- Add additional claim information after the policy section.
+                 Do not use @string selectors in Odoo 19. -->
+            <xpath expr="//field[@name='policy_number']" position="after">
+
+                <field name="documents_complete"/>
+
+                <field name="expected_approval_date"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!-- ==========================================================
+         INSURANCE CLAIM LIST
+         ========================================================== -->
+
+    <record id="insurance_phase23_tree_inherit" model="ir.ui.view">
+
+        <field name="name">oeh.insurance.claim.tree.ipd.management</field>
+
+        <field name="model">oeh.insurance.claim</field>
+
+        <field name="inherit_id" ref="inom_healthcare_system.insurance_claim_tree"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='policy_number']"
+                   position="after">
+
+                <field name="patient_card_number"/>
+
+                <field name="eligibility_verified"/>
+
+                <field name="documents_complete"/>
+
+            </xpath>
+
+        </field>
+
+    </record>
+
+</odoo>

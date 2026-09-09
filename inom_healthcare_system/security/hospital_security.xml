@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="0">
+    <!--
+        Hospital roles are deliberately NOT attached to an Odoo 19
+        res.groups.privilege. This prevents Odoo from rendering them as a
+        single Hospital Role dropdown on the standard Access Rights tab.
+
+        The actual roles are independent res.groups. The custom Hospital Roles
+        tab on res.users exposes each group as a Boolean switch, so one user
+        can have any combination of roles.
+    -->
+
+    <record id="group_hospital_receptionist" model="res.groups">
+        <field name="name">Receptionist / Front Desk</field>
+    </record>
+
+    <record id="group_hospital_doctor" model="res.groups">
+        <field name="name">Doctor</field>
+    </record>
+
+    <record id="group_hospital_nurse" model="res.groups">
+        <field name="name">Nurse</field>
+    </record>
+
+    <record id="group_hospital_pharmacist" model="res.groups">
+        <field name="name">Pharmacist</field>
+    </record>
+
+    <record id="group_hospital_lab" model="res.groups">
+        <field name="name">Lab Technician</field>
+    </record>
+
+    <record id="group_hospital_radiology" model="res.groups">
+        <field name="name">Radiology Staff</field>
+    </record>
+
+    <record id="group_hospital_billing" model="res.groups">
+        <field name="name">Billing &amp; Payments</field>
+        <field name="implied_ids" eval="[(4, ref('account.group_account_invoice'))]"/>
+    </record>
+
+    <record id="group_hospital_insurance" model="res.groups">
+        <field name="name">Insurance / TPA Staff</field>
+    </record>
+
+    <!-- Manager implies all operational hospital roles. -->
+    <record id="group_hospital_manager" model="res.groups">
+        <field name="name">Hospital Manager / Admin</field>
+        <field name="implied_ids" eval="[(4, ref('group_hospital_receptionist')),
+                                          (4, ref('group_hospital_doctor')),
+                                          (4, ref('group_hospital_nurse')),
+                                          (4, ref('group_hospital_pharmacist')),
+                                          (4, ref('group_hospital_lab')),
+                                          (4, ref('group_hospital_radiology')),
+                                          (4, ref('group_hospital_billing')),
+                                          (4, ref('group_hospital_insurance'))]"/>
+    </record>
+
+    <!-- Keep the Odoo Administrator as Hospital Manager/Admin. -->
+    <record id="base.user_admin" model="res.users">
+        <field name="group_ids" eval="[(4, ref('group_hospital_manager'))]"/>
+    </record>
+
+    <!-- Phase 2A: doctors work primarily with their own appointments/queue/
+         consultations. Patient master remains available so doctors can
+         open Patient 360 for their booked patients. -->
+    <record id="rule_doctor_own_appointments" model="ir.rule">
+        <field name="name">Doctor: Own Appointments</field>
+        <field name="model_id" ref="model_oeh_appointment"/>
+        <field name="groups" eval="[(4, ref('group_hospital_doctor'))]"/>
+        <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_doctor_own_queue" model="ir.rule">
+        <field name="name">Doctor: Own Queue</field>
+        <field name="model_id" ref="model_oeh_queue"/>
+        <field name="groups" eval="[(4, ref('group_hospital_doctor'))]"/>
+        <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_doctor_own_clinical" model="ir.rule">
+        <field name="name">Doctor: Own Clinical Consultations</field>
+        <field name="model_id" ref="model_oeh_clinical"/>
+        <field name="groups" eval="[(4, ref('group_hospital_doctor'))]"/>
+        <field name="domain_force">[('doctor_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <!-- Hospital Manager / Admin bypasses doctor-specific record rules.
+         Manager already implies the operational hospital roles, so these
+         allow-all rules make sure inherited Doctor rules do not restrict the
+         administrator to only their own doctor records. -->
+    <record id="rule_manager_all_appointments" model="ir.rule">
+        <field name="name">Hospital Manager: All Appointments</field>
+        <field name="model_id" ref="model_oeh_appointment"/>
+        <field name="groups" eval="[(4, ref('group_hospital_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="rule_manager_all_queue" model="ir.rule">
+        <field name="name">Hospital Manager: All Queue</field>
+        <field name="model_id" ref="model_oeh_queue"/>
+        <field name="groups" eval="[(4, ref('group_hospital_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="rule_manager_all_clinical" model="ir.rule">
+        <field name="name">Hospital Manager: All Clinical Consultations</field>
+        <field name="model_id" ref="model_oeh_clinical"/>
+        <field name="groups" eval="[(4, ref('group_hospital_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+</odoo>

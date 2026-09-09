@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="bed_phase23_form_inherit" model="ir.ui.view">
+        <field name="name">oeh.bed.form.ipd.management</field>
+        <field name="model">oeh.bed</field>
+        <field name="inherit_id" ref="inom_healthcare_system.bed_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Add fields directly after the existing patient field -->
+            <xpath expr="//field[@name='current_patient_id']" position="after">
+
+                <field name="current_ipd_id"
+                       readonly="1"/>
+
+                <field name="last_cleaned_at"
+                       readonly="1"/>
+
+                <field name="housekeeping_note"/>
+
+            </xpath>
+
+            <!-- Bed action buttons -->
+            <xpath expr="//header" position="inside">
+
+                <button name="action_open_current_admission"
+                        type="object"
+                        string="Open Admission"
+                        class="btn-secondary"
+                        invisible="not current_ipd_id"/>
+
+                <button name="action_ready_for_patient"
+                        type="object"
+                        string="Ready for Patient"
+                        class="btn-primary"
+                        invisible="status != 'cleaning'"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!-- ==========================================================
+         BED KANBAN
+         ========================================================== -->
+
+    <record id="bed_phase23_kanban_inherit" model="ir.ui.view">
+
+        <field name="name">oeh.bed.kanban.ipd.management</field>
+
+        <field name="model">oeh.bed</field>
+
+        <field name="inherit_id" ref="inom_healthcare_system.bed_kanban"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//t[@t-name='card']" position="inside">
+
+                <div t-if="record.current_ipd_id.raw_value"
+                     class="mt-2 text-primary">
+
+                    <i class="fa fa-hospital-o me-1"
+                       title="Current IPD Admission"
+                       aria-label="Current IPD Admission"/>
+
+                    <field name="current_ipd_id"/>
+
+                </div>
+
+                <div t-if="record.last_cleaned_at.raw_value"
+                     class="text-muted mt-1">
+
+                    <i class="fa fa-check-circle me-1"
+                       title="Last Cleaned"
+                       aria-label="Last Cleaned"/>
+
+                    Last Cleaned:
+                    <field name="last_cleaned_at"/>
+
+                </div>
+
+            </xpath>
+
+        </field>
+
+    </record>
+
+</odoo>

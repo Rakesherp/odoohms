@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="inom_healthcare_system.Dashboard">
+        <div class="o_inom_dashboard">
+
+            <div t-if="state.loading" class="o_inom_loading">
+                <i class="fa fa-spinner fa-spin fa-2x" title="Loading" aria-label="Loading"/>
+                <span class="ms-2">Loading dashboard…</span>
+            </div>
+
+            <t t-else="">
+                <!-- ============ HEADER ============ -->
+                <div class="o_inom_header">
+                    <div>
+                        <h1 class="o_inom_title">Dashboard</h1>
+                        <span class="o_inom_subtitle">
+                            Hi, <t t-esc="state.data.user_name"/>
+                            <t t-if="state.data.doctor_specialization"> (<t t-esc="state.data.doctor_specialization"/>)</t>
+                            👋
+                        </span>
+                    </div>
+                    <div class="o_inom_header_actions">
+                        <span class="o_inom_date_chip"><i class="fa fa-calendar me-1"/><t t-esc="state.data.today_label"/></span>
+                        <button class="btn btn-light o_inom_refresh" t-on-click="onRefresh">
+                            <i class="fa fa-refresh"/>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ============ KPI CARDS ============ -->
+                <div class="o_inom_kpi_grid">
+                    <div class="o_inom_kpi o_kpi_blue" t-on-click="() => this.openModel('oeh.patient', 'Patients')">
+                        <div class="o_kpi_icon"><i class="fa fa-users"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value" t-esc="state.data.kpis.patients_today"/>
+                            <div class="o_kpi_label">Patients Today</div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_kpi o_kpi_indigo" t-on-click="() => this.openModel('oeh.appointment', 'Appointments')">
+                        <div class="o_kpi_icon"><i class="fa fa-calendar-check-o"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value" t-esc="state.data.kpis.appointments_today"/>
+                            <div class="o_kpi_label">Appointments Today</div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_kpi o_kpi_orange" t-on-click="() => this.openModel('oeh.queue', 'Queue', [['state','=','waiting']])">
+                        <div class="o_kpi_icon"><i class="fa fa-hourglass-half"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value" t-esc="state.data.kpis.waiting_patients"/>
+                            <div class="o_kpi_label">Waiting Patients</div>
+                        </div>
+                    </div>
+
+                 <div class="o_inom_kpi o_kpi_teal" t-on-click="() => this.openModel('oeh.queue', 'Queue', [['state','=','in_progress']])">
+                        <div class="o_kpi_icon"><i class="fa fa-stethoscope"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value" t-esc="state.data.kpis.in_consultation"/>
+                            <div class="o_kpi_label">In Consultation</div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_kpi o_kpi_pink" t-on-click="() => this.openModel('oeh.appointment', 'Follow-ups')">
+                        <div class="o_kpi_icon"><i class="fa fa-repeat"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value" t-esc="state.data.kpis.followups_due"/>
+                            <div class="o_kpi_label">Follow-ups Due</div>
+                        </div>
+                    </div>
+
+                   <div class="o_inom_kpi o_kpi_purple" t-on-click="() => this.openModel('oeh.prescription', 'Prescriptions')">
+                        <div class="o_kpi_icon"><i class="fa fa-file-text-o"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value" t-esc="state.data.kpis.pending_prescriptions"/>
+                            <div class="o_kpi_label">Pending Prescriptions</div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_kpi o_kpi_green" t-on-click="() => this.openModel('oeh.laboratory', 'Laboratory')">
+                        <div class="o_kpi_icon"><i class="fa fa-flask"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value" t-esc="state.data.kpis.lab_pending"/>
+                            <div class="o_kpi_label">Lab Reports Pending</div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_kpi o_kpi_cyan"
+					     t-on-click="() => this.openModel('account.move', 'Customer Invoices', [['move_type','=','out_invoice']])">
+					    <div class="o_kpi_icon">
+					        <i class="fa fa-file-text-o"/>
+					    </div>
+					    <div class="o_kpi_body">
+					        <div class="o_kpi_value"
+					             t-esc="formatMoney(state.data.kpis.today_revenue)"/>
+					        <div class="o_kpi_label">
+					            Today's Revenue
+					        </div>
+					    </div>
+					</div>
+                </div>
+
+                <!-- ============ ROW: Appointments / Queue / Doctors ============ -->
+                <div class="o_inom_row_3">
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head">
+                            <span>Today's Appointments</span>
+                            <a class="o_panel_link" t-on-click="() => this.openModel('oeh.appointment', 'Appointments')">View All</a>
+                        </div>
+                        <table class="o_inom_table">
+                            <thead>
+                                <tr><th>Time</th><th>Patient</th><th>Doctor</th><th>Status</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="state.data.todays_appointments" t-as="a" t-key="a_index">
+                                    <td t-esc="a.time"/>
+                                    <td t-esc="a.patient"/>
+                                    <td t-esc="a.doctor"/>
+                                    <td><span t-attf-class="o_status_pill o_status_{{a.state}}" t-esc="a.state"/></td>
+                                </tr>
+                                <tr t-if="!state.data.todays_appointments.length">
+                                    <td colspan="4" class="text-muted text-center py-3">No appointments today</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head"><span>Patient Queue Status</span></div>
+                        <div class="o_donut_wrap">
+                            <svg viewBox="0 0 100 100" class="o_donut_svg">
+                                <circle cx="50" cy="50" r="40" class="o_donut_bg"/>
+                                <circle t-foreach="donutSegments([
+                                        {label:'Waiting', count: state.data.queue_counts.waiting, color:'#f59e0b'},
+                                        {label:'In Consultation', count: state.data.queue_counts.in_progress, color:'#14b8a6'},
+                                        {label:'Completed', count: state.data.queue_counts.done, color:'#22c55e'},
+                                        {label:'No Show', count: state.data.queue_counts.no_show, color:'#f43f5e'}])"
+                                        t-as="seg" t-key="seg.label"
+                                        cx="50" cy="50" r="40" fill="none"
+                                        t-att-stroke="seg.color" stroke-width="14"
+                                        t-att-stroke-dasharray="seg.dasharray"
+                                        t-att-stroke-dashoffset="seg.dashoffset"/>
+                            </svg>
+                            <div class="o_donut_center">
+                                <div class="o_donut_total" t-esc="state.data.queue_total"/>
+                                <div class="o_donut_total_label">Total</div>
+                            </div>
+                        </div>
+                        <div class="o_donut_legend">
+                            <div class="o_legend_row"><span class="o_dot" style="background:#f59e0b"/>Waiting <b t-esc="state.data.queue_counts.waiting"/></div>
+                            <div class="o_legend_row"><span class="o_dot" style="background:#14b8a6"/>In Consultation <b t-esc="state.data.queue_counts.in_progress"/></div>
+                            <div class="o_legend_row"><span class="o_dot" style="background:#22c55e"/>Completed <b t-esc="state.data.queue_counts.done"/></div>
+                            <div class="o_legend_row"><span class="o_dot" style="background:#f43f5e"/>No Show <b t-esc="state.data.queue_counts.no_show"/></div>
+                        </div>
+                        <div class="o_wait_stats">
+                            <div><i class="fa fa-clock-o me-1"/>Avg Wait <b t-esc="state.data.avg_wait + ' mins'"/></div>
+                            <div><i class="fa fa-clock-o me-1"/>Longest <b t-esc="state.data.max_wait + ' mins'"/></div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head">
+                            <span>Doctor / Consultant Status</span>
+                            <a class="o_panel_link" t-on-click="() => this.openModel('oeh.doctor', 'Doctors')">View All</a>
+                        </div>
+                        <table class="o_inom_table">
+                            <thead>
+                                <tr><th>Doctor</th><th>Current</th><th>Waiting</th><th>Status</th><th>Next</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="state.data.doctor_rows" t-as="d" t-key="d_index">
+                                    <td>
+                                        <div t-esc="d.name"/>
+                                        <div class="text-muted small" t-esc="d.specialization"/>
+                                    </td>
+                                    <td t-esc="d.current_patient"/>
+                                    <td t-esc="d.waiting"/>
+                                    <td><span t-attf-class="o_status_pill o_status_{{d.status_key}}" t-esc="d.status_label"/></td>
+                                    <td t-esc="d.next_appointment"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============ ROW: Alerts / Worklist / Finance / Quick Actions ============ -->
+                <div class="o_inom_row_4">
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head"><span>Clinical Alerts</span></div>
+                        <div class="o_list_rows">
+                            <div class="o_alert_row" t-foreach="state.data.alerts" t-as="al" t-key="al.label"
+                                 t-on-click="() => this.openModel(al.model, al.label, al.domain)">
+                                <i t-attf-class="fa {{al.icon}} o_alert_icon o_alert_{{al.level}}"/>
+                                <span class="o_alert_label" t-esc="al.label"/>
+                                <span t-attf-class="o_alert_count o_alert_{{al.level}}" t-esc="al.count"/>
+                            </div>
+                            <div class="o_alert_row" t-on-click="() => this.openModel('product.product', 'Low Stock Medicines', [['is_medicine','=',true],['is_low_stock','=',true]])">
+                                <i class="fa fa-cubes o_alert_icon o_alert_warning"/>
+                                <span class="o_alert_label">Low Stock Medicines</span>
+                                <span class="o_alert_count o_alert_warning" t-esc="state.data.pharmacy.low_stock_count"/>
+                            </div>
+                            <div class="o_alert_row" t-on-click="() => this.openModel('stock.lot', 'Expiring / Expired Medicine Lots', [['product_id.is_medicine','=',true],['expiration_date','!=',false]])">
+                                <i class="fa fa-hourglass-end o_alert_icon o_alert_danger"/>
+                                <span class="o_alert_label">Medicines Expiring Soon</span>
+                                <span class="o_alert_count o_alert_danger" t-esc="state.data.pharmacy.expiring_count"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head"><span>Clinical Worklist</span></div>
+                        <div class="o_list_rows">
+                            <div class="o_alert_row" t-foreach="state.data.worklist" t-as="w" t-key="w.label"
+                                 t-on-click="() => this.openModel(w.model, w.label, w.domain)">
+                                <i t-attf-class="fa {{w.icon}} o_alert_icon o_alert_info"/>
+                                <span class="o_alert_label" t-esc="w.label"/>
+                                <span class="o_alert_count o_alert_info" t-esc="w.count"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head"><span>Today's Financial Summary</span></div>
+                        <div class="o_fin_rows">
+                            <div class="o_fin_row"><span>Consultation Revenue</span><b t-esc="formatMoney(state.data.finance.consultation_revenue)"/></div>
+                            <div class="o_fin_row"><span>Other Revenue</span><b t-esc="formatMoney(state.data.finance.other_revenue)"/></div>
+                            <div class="o_fin_row o_fin_total"><span>Total Customer Invoices</span><b t-esc="formatMoney(state.data.finance.total_collection)"/></div>
+                            <div class="o_fin_row o_fin_due"><span>Pending Payments</span><b t-esc="formatMoney(state.data.finance.pending_payments)"/></div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head"><span>Quick Actions</span></div>
+                        <div class="o_quick_grid">
+                            <div class="o_quick_btn" t-on-click="() => this.onQuickAction('register_patient')">
+                                <i class="fa fa-user-plus"/><span>Register Patient</span></div>
+                            <div class="o_quick_btn" t-on-click="() => this.onQuickAction('create_appointment')">
+                                <i class="fa fa-calendar-plus-o"/><span>Create Appointment</span></div>
+                            <div class="o_quick_btn" t-on-click="() => this.onQuickAction('create_prescription')">
+                                <i class="fa fa-medkit"/><span>Create Prescription</span></div>
+                            <div class="o_quick_btn" t-on-click="() => this.onQuickAction('order_lab_test')">
+                                <i class="fa fa-flask"/><span>Order Lab Test</span></div>
+                            <div class="o_quick_btn" t-on-click="() => this.onQuickAction('view_patient_history')">
+                                <i class="fa fa-history"/><span>View Patients</span></div>
+                            <div class="o_quick_btn" t-on-click="() => this.onQuickAction('generate_invoice')">
+                                <i class="fa fa-file-text"/><span>Generate Invoice</span></div>
+                            <div class="o_quick_btn" t-on-click="() => this.onQuickAction('add_followup')">
+                                <i class="fa fa-clock-o"/><span>Follow-ups</span></div>
+                            <div class="o_quick_btn" t-on-click="() => this.onQuickAction('send_message')">
+                                <i class="fa fa-comment"/><span>Send Message</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ ROW: Trends / Specialization / Age / Gender ============ -->
+                <div class="o_inom_row_4">
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head"><span>Patient Trends (7 Days)</span></div>
+                        <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="o_trend_svg">
+                            <polyline t-att-points="trendPoints(state.data.trend, 'new_patients')" class="o_trend_line o_trend_a"/>
+                            <polyline t-att-points="trendPoints(state.data.trend, 'appointments')" class="o_trend_line o_trend_b"/>
+                        </svg>
+                        <div class="o_trend_axis">
+                            <span t-foreach="state.data.trend" t-as="t" t-key="t_index" t-esc="t.date"/>
+                        </div>
+                        <div class="o_trend_legend">
+                            <span><i class="o_dot" style="background:#6366f1"/>New Patients</span>
+                            <span><i class="o_dot" style="background:#14b8a6"/>Appointments</span>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head"><span>Patients by Specialization</span></div>
+                        <div class="o_panel_body">
+                            <div class="o_bar_row" t-foreach="state.data.specialization_list" t-as="item" t-key="item.label">
+                                <div class="o_bar_label" t-esc="item.label"/>
+                                <div class="o_bar_track">
+                                    <div class="o_bar_fill" t-att-style="'width:' + barWidth(item, state.data.specialization_list) + ';background:#6366f1'"/>
+                                </div>
+                                <div class="o_bar_count" t-esc="item.count"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head"><span>Age Group Distribution</span></div>
+                        <div class="o_age_chart">
+                            <div class="o_age_bar_wrap" t-foreach="state.data.age_list" t-as="item" t-key="item.label">
+                                <div class="o_age_bar" t-att-style="'height:' + ageBarHeight(item, state.data.age_list)"/>
+                                <div class="o_age_count" t-esc="item.count"/>
+                                <div class="o_age_label" t-esc="item.label"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head"><span>Gender Distribution</span></div>
+                        <div class="o_donut_wrap">
+                            <svg viewBox="0 0 100 100" class="o_donut_svg">
+                                <circle cx="50" cy="50" r="40" class="o_donut_bg"/>
+                                <circle t-foreach="donutSegments(state.data.gender_list)" t-as="seg" t-key="seg.label"
+                                        cx="50" cy="50" r="40" fill="none"
+                                        t-att-stroke="seg.color" stroke-width="14"
+                                        t-att-stroke-dasharray="seg.dasharray"
+                                        t-att-stroke-dashoffset="seg.dashoffset"/>
+                            </svg>
+                            <div class="o_donut_center">
+                                <div class="o_donut_total" t-esc="state.data.total_patients"/>
+                                <div class="o_donut_total_label">Total</div>
+                            </div>
+                        </div>
+                        <div class="o_donut_legend">
+                            <div class="o_legend_row" t-foreach="state.data.gender_list" t-as="g" t-key="g.label">
+                                <span class="o_dot" t-att-style="'background:' + colorFor(g_index)"/>
+                                <t t-esc="g.label"/> <b t-esc="g.count"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ PHARMACY: Low Stock + Expiring ============ -->
+                <div class="o_inom_row_2">
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head">
+                            <span><i class="fa fa-cubes me-2"/>Low Stock Medicines</span>
+                            <a class="o_panel_link" t-on-click="() => this.openModel('product.product', 'Low Stock Medicines', [['is_medicine','=',true],['is_low_stock','=',true]])">View All</a>
+                        </div>
+                        <table class="o_inom_table">
+                            <thead><tr><th>Medicine</th><th>On Hand</th><th>Reorder Level</th></tr></thead>
+                            <tbody>
+                                <tr t-foreach="state.data.pharmacy.low_stock_list" t-as="m" t-key="m_index">
+                                    <td t-esc="m.name"/>
+                                    <td><span class="o_status_pill o_status_danger" t-esc="m.on_hand"/></td>
+                                    <td t-esc="m.min_stock"/>
+                                </tr>
+                                <tr t-if="!state.data.pharmacy.low_stock_list.length">
+                                    <td colspan="3" class="text-muted text-center py-3">No low-stock medicines 🎉</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="o_inom_card">
+                        <div class="o_card_head">
+                            <span><i class="fa fa-hourglass-end me-2"/>Expiring / Expired Lots</span>
+                            <a class="o_panel_link" t-on-click="() => this.openModel('stock.lot', 'Medicine Lots', [['product_id.is_medicine','=',true]])">View All</a>
+                        </div>
+                        <table class="o_inom_table">
+                            <thead><tr><th>Lot</th><th>Medicine</th><th>Expiry</th><th>Qty</th><th>Days Left</th></tr></thead>
+                            <tbody>
+                                <tr t-foreach="state.data.pharmacy.expiring_list" t-as="b" t-key="b_index">
+                                    <td t-esc="b.batch_no"/>
+                                    <td t-esc="b.medicine"/>
+                                    <td t-esc="b.expiry_date"/>
+                                    <td t-esc="b.quantity"/>
+                                    <td>
+                                        <span t-attf-class="o_status_pill {{b.expired ? 'o_status_danger' : 'o_status_waiting'}}"
+                                              t-esc="b.expired ? 'Expired' : (b.days_left + 'd')"/>
+                                    </td>
+                                </tr>
+                                <tr t-if="!state.data.pharmacy.expiring_list.length">
+                                    <td colspan="5" class="text-muted text-center py-3">Nothing expiring in the next 90 days</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </t>
+        </div>
+    </t>
+
+</templates>

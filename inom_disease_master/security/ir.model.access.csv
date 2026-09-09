@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_disease_manager,disease.manager,model_oeh_disease,inom_healthcare_system.group_hospital_manager,1,1,1,1
+access_disease_doctor,disease.doctor,model_oeh_disease,inom_healthcare_system.group_hospital_doctor,1,1,1,0
+access_disease_receptionist,disease.receptionist,model_oeh_disease,inom_healthcare_system.group_hospital_receptionist,1,0,0,0
+access_history_doc,history.doc,model_patient_history,inom_healthcare_system.group_hospital_doctor,1,1,1,1
+access_history_nur,history.nur,model_patient_history,inom_healthcare_system.group_hospital_nurse,1,1,0,0
+access_disease_category_manager,disease.category.manager,model_oeh_disease_category,inom_healthcare_system.group_hospital_manager,1,1,1,1
+access_disease_category_doctor,disease.category.doctor,model_oeh_disease_category,inom_healthcare_system.group_hospital_doctor,1,0,0,0
+access_disease_category_receptionist,disease.category.receptionist,model_oeh_disease_category,inom_healthcare_system.group_hospital_receptionist,1,0,0,0
